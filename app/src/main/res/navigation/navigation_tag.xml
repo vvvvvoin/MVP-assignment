@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_tag"
+    app:startDestination="@id/tagFragment2">
+
+    <fragment
+        android:id="@+id/tagFragment2"
+        android:name="com.example.myfriend.view.tag.TagFragment"
+        android:label="fragment_tag"
+        tools:layout="@layout/fragment_tag" />
+</navigation>

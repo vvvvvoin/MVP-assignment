@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.myfriend.view.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_nationFragment"
+            app:destination="@id/nationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_tagFragment"
+            app:destination="@id/tagFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nationFragment"
+        android:name="com.example.myfriend.view.nation.NationFragment"
+        android:label="fragment_nation"
+        tools:layout="@layout/fragment_nation" />
+    <fragment
+        android:id="@+id/tagFragment"
+        android:name="com.example.myfriend.view.TagFragment"
+        android:label="fragment_tag"
+        tools:layout="@layout/fragment_tag" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.myfriend.view.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

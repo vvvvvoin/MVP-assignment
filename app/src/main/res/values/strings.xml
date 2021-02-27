@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MyFriend</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="please_input_search_data">검색어를 입력해주세요</string>
+</resources>
