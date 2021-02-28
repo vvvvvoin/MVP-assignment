@@ -4,11 +4,15 @@
 
     <data>
         <variable
+            name="presenter"
+            type="com.example.myfriend.view.nation.NationPresenter" />
+        <variable
             name="item"
             type="com.example.myfriend.model.vo.Nation" />
     </data>
 
     <LinearLayout
+        android:id="@+id/item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"

@@ -1,5 +1,7 @@
 package com.example.myfriend.view.nation
 
+import com.example.myfriend.model.vo.Nation
+
 interface NationContract {
     interface View {
         fun setPresenter(presenter: Presenter)
@@ -9,7 +11,7 @@ interface NationContract {
 
     interface Presenter {
         fun setView(view: View)
-        fun openNationDetail(query : String)
+        fun openNationDetail(nation : Nation)
         fun searchNation(query: String)
     }
 }

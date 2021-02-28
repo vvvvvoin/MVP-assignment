@@ -2,7 +2,7 @@ package com.example.myfriend.data.api
 
 
 import com.example.myfriend.model.vo.Nation
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import retrofit2.http.*
 
 interface MyAPIService {

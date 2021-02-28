@@ -6,12 +6,12 @@ import com.example.myfriend.data.dataSource.LocalDataSource
 import com.example.myfriend.data.dataSource.RemoteDataSource
 import com.example.myfriend.data.db.MyDataBase
 import com.example.myfriend.data.repository.MyRepository
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -35,7 +35,7 @@ val retrofit: Retrofit = Retrofit
     .baseUrl("https://restcountries.eu")
     .client(client)
     .addConverterFactory(GsonConverterFactory.create())
-    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
     .build()
 
 private val myApi: MyAPIService = retrofit.create(MyAPIService::class.java)

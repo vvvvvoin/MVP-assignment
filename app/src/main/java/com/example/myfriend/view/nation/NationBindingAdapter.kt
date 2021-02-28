@@ -21,6 +21,7 @@ fun setBookList(
         if(searchAdapter.nationList == it) return
         searchAdapter.nationList.clear()
         searchAdapter.nationList =  it
+        Log.d("asdasdasdasdasd", "바뀐거기시는 = ${it.toString()}")
         searchAdapter.notifyDataSetChanged()
     }
 }

@@ -2,11 +2,9 @@ package com.example.myfriend.data.dataSource
 
 import com.example.myfriend.data.api.MyAPIService
 import com.example.myfriend.model.vo.Nation
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.annotations.NonNull
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
-import okhttp3.Response
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class RemoteDataSource(
     private val myAPIService: MyAPIService
@@ -26,5 +24,6 @@ class RemoteDataSource(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
 
 }

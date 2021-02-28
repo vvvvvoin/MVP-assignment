@@ -23,7 +23,7 @@ object SvgLoader {
     fun fetchSvg(context: Context, url: String, imageView: ImageView) {
         if (httpClient == null) {
             httpClient = OkHttpClient.Builder()
-                .cache(Cache(context.getCacheDir(), 5 * 1024 * 1014))
+                //.cache(Cache(context.getCacheDir(), 5 * 1024 * 1014))
                 .build()
         }
 

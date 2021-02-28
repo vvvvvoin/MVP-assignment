@@ -10,6 +10,10 @@
         android:name="com.example.myfriend.view.nation.NationFragment"
         android:label="fragment_nation"
         tools:layout="@layout/fragment_nation" >
+        <argument
+            android:name="isAddOrEdit"
+            app:argType="boolean"
+            android:defaultValue="false"/>
         <action
             android:id="@+id/action_nationFragment2_to_nationDetailFragment"
             app:destination="@id/nationDetailFragment" />
@@ -18,5 +22,14 @@
         android:id="@+id/nationDetailFragment"
         android:name="com.example.myfriend.view.nation.detail.NationDetailFragment"
         android:label="fragment_nation_detail"
-        tools:layout="@layout/fragment_nation_detail" />
+        tools:layout="@layout/fragment_nation_detail">
+        <argument
+            android:name="nation"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="isChecked"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
 </navigation>

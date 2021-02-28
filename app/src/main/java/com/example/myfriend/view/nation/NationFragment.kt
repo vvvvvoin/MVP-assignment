@@ -8,9 +8,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentNationBinding
+import com.example.myfriend.model.vo.Nation
+import com.example.myfriend.view.home.HomeFragmentDirections
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -24,14 +29,19 @@ class NationFragment : Fragment(), NationContract.View {
 
     private lateinit var binding: FragmentNationBinding
     private val myRepository: MyRepository by inject()
+    //addEdit fragment 에서 넘어왔는지 boolean 으로 구분함
+    private val args : NationFragmentArgs by navArgs()
     private val nationAdapter: NationAdapter by lazy {
         context?.let { NationAdapter(it) }!!
     }
+    private var nationQuery = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "addEdit에서 넘어옴 ${args.isAddOrEdit}")
         mPresenter = NationPresenter(myRepository)
         mPresenter.setView(this)
 
@@ -40,6 +50,10 @@ class NationFragment : Fragment(), NationContract.View {
             presenter = (mPresenter as NationPresenter)
             lifecycleOwner = this@NationFragment
         }
+
+        (mPresenter as NationPresenter).nationFavorite.observe(viewLifecycleOwner, {
+            Log.d("aeaweaweaweaw", it.toString())
+        })
         val view = binding.root
 
         binding.nationRecycler.apply {
@@ -47,30 +61,44 @@ class NationFragment : Fragment(), NationContract.View {
             setHasFixedSize(true)
         }
 
+        nationAdapter.onItemClick { view, nation ->
+            if(!args.isAddOrEdit) (mPresenter as NationPresenter).openNationDetail(nation)
+        }
+
         view.findViewById<EditText>(R.id.search_edit_text).textChanges()
             .subscribeOn(Schedulers.io())
+            .filter{ it.toString().length > 1 }
             .debounce(200, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
+                if(!args.isAddOrEdit) nationQuery = it.toString()
                 mPresenter.searchNation(it.toString())
-                Log.d("test", it.toString())
             }
 
+        initView()
 
-        val imageView = view.findViewById<ImageView>(R.id.search_ic)
-
-        setHasOptionsMenu(true)
         return view
     }
 
+    private fun initView(){
+        if(args.isAddOrEdit){
+            (mPresenter as NationPresenter).isAddEdit = true
+            binding.searchEditText.text.clear()
+        }else{
+            binding.searchEditText.setText(nationQuery)
+        }
 
+    }
     override fun setPresenter(presenter: NationContract.Presenter) {
         mPresenter = presenter
     }
 
-    override fun showNationDetail(data: String, check: Boolean) {
-        // bundle이든 뭐시기든 값만 넘기면됨
-        //Navigation.findNavController(requireView()).navigate(R.id.action_nationFragment2_to_nationDetailFragment)
+    override fun showNationDetail(
+        data: String,
+        check: Boolean
+    ) {
+        NationFragmentDirections.actionNationFragment2ToNationDetailFragment(data, check).also {
+            findNavController().navigate(it) }
     }
 
     override fun errorMessage(error: String) {
