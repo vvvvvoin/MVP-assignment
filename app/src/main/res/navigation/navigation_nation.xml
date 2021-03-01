@@ -25,8 +25,7 @@
         tools:layout="@layout/fragment_nation_detail">
         <argument
             android:name="nation"
-            app:argType="string"
-            android:defaultValue=""/>
+            app:argType="com.example.myfriend.data.db.entity.Nation" />
         <argument
             android:name="isChecked"
             app:argType="boolean"

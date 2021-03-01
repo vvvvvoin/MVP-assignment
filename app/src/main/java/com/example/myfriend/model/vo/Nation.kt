@@ -1,5 +1,9 @@
 package com.example.myfriend.model.vo
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Nation(
     var name: String,
     var topLevelDomain: ArrayList<String>,
@@ -25,24 +29,28 @@ data class Nation(
     var flag: String,
     var regionalBlocs: ArrayList<RegionalBlocs>,
     var cioc: String
-) {
+) : Parcelable {
+
+    @Parcelize
     data class Currencies(
         var code: String,
         var name: String,
         var symbol: String
-    )
+    ) : Parcelable
 
+    @Parcelize
     data class Languages(
         var iso639_1: String,
         var iso639_2: String,
         var name: String,
         var nativeName: String
-    )
+    ) : Parcelable
 
+    @Parcelize
     data class RegionalBlocs(
         var acronym : String,
         var name : String,
         var otherAcronyms : ArrayList<String>,
         var otherNames: ArrayList<String>
-    )
+    ) : Parcelable
 }

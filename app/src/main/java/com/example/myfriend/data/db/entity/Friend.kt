@@ -12,11 +12,12 @@ data class Friend(
     var number: String?,
     var email: String?,
     var flagUri: String,
-    var nation : String
+    var nation : String,
+    var profile : String?
 ) {
 
-    constructor(name: String, number: String?, email: String?, flagUri: String, nation: String) : this(
-        UUID.randomUUID().toString(), name = name, number = number, email = email, flagUri = flagUri, nation = nation
+    constructor(name: String, number: String?, email: String?, flagUri: String, nation: String, profile : String?) : this(
+        UUID.randomUUID().toString(), name = name, number = number, email = email, flagUri = flagUri, nation = nation, profile = profile
     )
 
 }

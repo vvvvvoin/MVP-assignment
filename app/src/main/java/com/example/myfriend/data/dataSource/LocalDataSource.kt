@@ -25,6 +25,12 @@ class LocalDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getFriendListSeq() : Single<List<Friend>> {
+        return myDao.getFriendListSeq()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun addFriend(friend: Friend): Single<Long> {
         return myDao.insertFriend(friend)
             .subscribeOn(Schedulers.io())
@@ -36,7 +42,7 @@ class LocalDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getFavorite(nation : String): Single<Nation> {
+    fun getFavorite(nation : String): Single<List<Nation>> {
         return myDao.getFavorite(nation)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

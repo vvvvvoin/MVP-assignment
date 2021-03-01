@@ -1,10 +1,14 @@
 package com.example.myfriend.view.home
 
+import android.content.Intent
+import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.repository.MyRepository
+import com.example.myfriend.di.repository
 import com.example.myfriend.model.vo.Nation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +25,7 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
         get() = _friendList
 
     init {
-        myRepository.getFriendList()
-
+        myRepository.getFriendList(ListOrderType.NAME)
         _friendList.addSource(resultNationList){
             _friendList.value = it
         }
@@ -35,7 +38,7 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
     }
 
     override fun setOrder(listOrderType: ListOrderType) {
-        myRepository
+        myRepository.getFriendList(listOrderType)
     }
 
 }

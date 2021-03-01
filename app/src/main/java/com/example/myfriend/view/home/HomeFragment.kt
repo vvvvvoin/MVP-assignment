@@ -1,5 +1,7 @@
 package com.example.myfriend.view.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -10,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentHomeBinding
+import com.example.myfriend.view.nation.NationAdapter
 import org.koin.android.ext.android.inject
 
 class HomeFragment : Fragment(), HomeContract.View {
@@ -19,6 +22,10 @@ class HomeFragment : Fragment(), HomeContract.View {
     private lateinit var binding: FragmentHomeBinding
     private val myRepository: MyRepository by inject()
 
+    private val homeAdapter: HomeAdapter by lazy {
+        HomeAdapter(mPresenter as HomePresenter)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,12 +34,17 @@ class HomeFragment : Fragment(), HomeContract.View {
         mPresenter.setView(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        val view = binding.root
+        binding.apply {
+            presenter = (mPresenter as HomePresenter)
+            lifecycleOwner = this@HomeFragment
+        }
 
-        //데이터 바인딩으로 사사질 예정
-        (mPresenter as HomePresenter).friendList.observe(viewLifecycleOwner, {
-            Log.d(TAG, it.toString())
-        })
+        val view = binding.root
+        binding.friendRecycler.apply {
+            adapter = homeAdapter
+            setPresenter(mPresenter)
+            setHasFixedSize(true)
+        }
 
         setHasOptionsMenu(true)
         return view
@@ -63,5 +75,19 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun errorMessage(error: String) {
 
     }
+
+/*
+    override fun openPhone(number: String) {
+        startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number)))
+    }
+
+    override fun openEmail(toEmail: String) {
+        val email = Intent(Intent.ACTION_SEND)
+        email.type = "plain/text"
+        val address = arrayOf(toEmail)
+        email.putExtra(Intent.EXTRA_EMAIL, address)
+        startActivity(email)
+    }
+*/
 
 }

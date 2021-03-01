@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.view.nation.NationContract
-import com.example.myfriend.view.nation.NationPresenter
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -31,9 +29,9 @@ class NationDetailFragment : Fragment(), NationDetailContract.View{
         mPresenter = NationDetailPresenter(myRepository)
         mPresenter.setView(this)
         val view = inflater.inflate(R.layout.fragment_nation_detail, container, false)
-        val nationName =  nationDetailFragmentArgs.nation
+        val nation =  nationDetailFragmentArgs.nation
         val isCheck =  nationDetailFragmentArgs.isChecked
-        val uri = ("https://flagcdn.com/h240/" + nationName.toLowerCase(Locale.ROOT) +".png").toUri()
+        val uri = ("https://flagcdn.com/h240/" + nation.alpha2Code.toLowerCase(Locale.ROOT) +".png").toUri()
         val imageView = view.findViewById<ImageView>(R.id.nation_image)
 
         if(isCheck){
@@ -42,7 +40,7 @@ class NationDetailFragment : Fragment(), NationDetailContract.View{
             Log.d(TAG, "별표x")
         }
 
-        view.findViewById<TextView>(R.id.nation_name_text).text =nationName
+        view.findViewById<TextView>(R.id.nation_name_text).text =nation.nation
 
         Glide.with(this).load(uri).override(Target.SIZE_ORIGINAL).into(imageView)
 

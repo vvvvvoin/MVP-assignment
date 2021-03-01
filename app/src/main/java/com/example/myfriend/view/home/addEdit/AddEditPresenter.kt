@@ -18,11 +18,11 @@ class AddEditPresenter(private val myRepository: MyRepository, private val mId :
         this.view.setPresenter(this)
     }
 
-    override fun addEdit(name: String, number: String?, email: String?, flag: String, nation : String) {
+    override fun addEdit(name: String, number: String?, email: String?, flag: String, nation : String, profile : String?) {
         if(mId == null){
-            myRepository.addFriend(Friend(name, number, email, flag, nation))
+            myRepository.addFriend(Friend(name, number, email, flag, nation, profile))
         }else{
-            myRepository.updateFriend(Friend(mId, name, number, email, flag, nation))
+            myRepository.updateFriend(Friend(mId, name, number, email, flag, nation, profile))
         }
         view.completeAddEdit()
     }

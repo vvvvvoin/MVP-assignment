@@ -12,6 +12,6 @@ interface AddEditContract {
 
     interface Presenter {
         fun setView(view: View)
-        fun addEdit(name: String, number: String?, email: String?, flag: String, nation: String)
+        fun addEdit(name: String, number: String?, email: String?, flag: String, nation: String, profile : String?)
     }
 }

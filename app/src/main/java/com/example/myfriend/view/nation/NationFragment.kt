@@ -1,13 +1,16 @@
 package com.example.myfriend.view.nation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,7 +18,10 @@ import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentNationBinding
 import com.example.myfriend.model.vo.Nation
+import com.example.myfriend.util.EventObserver
 import com.example.myfriend.view.home.HomeFragmentDirections
+import com.example.myfriend.view.home.addEdit.AddEditFragment
+import com.example.myfriend.view.nation.detail.NationDetailActivity
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -42,27 +48,33 @@ class NationFragment : Fragment(), NationContract.View {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "addEdit에서 넘어옴 ${args.isAddOrEdit}")
-        mPresenter = NationPresenter(myRepository)
+        mPresenter = NationPresenter(myRepository, args.isAddOrEdit)
         mPresenter.setView(this)
 
+        Log.d(TAG, "프레젠터 주소는 = ${mPresenter.toString()}")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nation, container, false)
         binding.apply {
             presenter = (mPresenter as NationPresenter)
             lifecycleOwner = this@NationFragment
         }
 
-        (mPresenter as NationPresenter).nationFavorite.observe(viewLifecycleOwner, {
-            Log.d("aeaweaweaweaw", it.toString())
-        })
         val view = binding.root
-
         binding.nationRecycler.apply {
             adapter = nationAdapter
             setHasFixedSize(true)
         }
 
         nationAdapter.onItemClick { view, nation ->
-            if(!args.isAddOrEdit) (mPresenter as NationPresenter).openNationDetail(nation)
+            Log.d(TAG, "클릭 리스너가 실행됩니다.")
+            if(args.isAddOrEdit == false) {
+                    (mPresenter as NationPresenter).openNationDetail(nation)
+            }else{
+                //클릭된 nation정보를 넘김
+                val bundle = Bundle()
+                bundle.putParcelable(AddEditFragment.ADD_OR_EDIT_BUNDLE_KEY, nation)
+                setFragmentResult(AddEditFragment.ADD_OR_EDIT_REQUEST_KEY, bundle)
+                activity?.onBackPressed()
+            }
         }
 
         view.findViewById<EditText>(R.id.search_edit_text).textChanges()
@@ -76,29 +88,40 @@ class NationFragment : Fragment(), NationContract.View {
             }
 
         initView()
+        initObserver()
 
         return view
     }
 
     private fun initView(){
         if(args.isAddOrEdit){
-            (mPresenter as NationPresenter).isAddEdit = true
             binding.searchEditText.text.clear()
         }else{
             binding.searchEditText.setText(nationQuery)
         }
-
     }
+
+    private fun initObserver() {
+        (mPresenter as NationPresenter).nationFavorite.observe(viewLifecycleOwner, {
+            if (it.nation.equals("*")) return@observe
+            var check = true
+            val intent = Intent(context, NationDetailActivity::class.java)
+            intent.putExtra(NationDetailActivity.EXTRA_NATION_DATA, it)
+            if (it.nation.contains("*")) check = false
+            intent.putExtra(NationDetailActivity.EXTRA_IS_CHECKED, check)
+            startActivity(intent)
+        })
+    }
+
     override fun setPresenter(presenter: NationContract.Presenter) {
         mPresenter = presenter
     }
 
     override fun showNationDetail(
-        data: String,
+        data: com.example.myfriend.data.db.entity.Nation,
         check: Boolean
     ) {
-        NationFragmentDirections.actionNationFragment2ToNationDetailFragment(data, check).also {
-            findNavController().navigate(it) }
+
     }
 
     override fun errorMessage(error: String) {

@@ -11,10 +11,10 @@ import io.reactivex.Single
 interface MyDao {
 
     //nationFavorite
-    @Query("SELECT * FROM nation WHERE nation = :name")
-    fun getFavorite(name : String) : Single<Nation>
+    @Query("SELECT * FROM nation WHERE alpha2Code = :name")
+    fun getFavorite(name : String) : Single<List<Nation>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun setFavorite(nation : Nation) : Single<Long>
 
     @Delete
@@ -31,7 +31,8 @@ interface MyDao {
     @Query("SELECT * FROM friend ORDER BY name")
     fun getFriendList() : Single<List<Friend>>
 
-
+    @Query("SELECT * FROM friend ORDER BY seq")
+    fun getFriendListSeq() : Single<List<Friend>>
 
 /*    @Query("SELECT * FROM friend ORDER BY name")
     fun getFriendListObservable() :  LiveData<List<Friend>>

@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/nation_detail_star"
+        android:id="@+id/nation_detail_star_uncheck"
         android:title="star"
         android:icon="@drawable/ic_baseline_star_border_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/nation_detail_star_checked"
+        android:title="star"
+        android:icon="@drawable/ic_baseline_star_24"
+        android:visible="false"
         app:showAsAction="always" />
 </menu>

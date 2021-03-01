@@ -26,10 +26,10 @@
             android:defaultValue="@null"/>
         <action
             android:id="@+id/action_addEditFragment_to_nationFragment3"
-            app:destination="@id/nationFragment3" />
+            app:destination="@id/nationFragment2" />
     </fragment>
     <fragment
-        android:id="@+id/nationFragment3"
+        android:id="@+id/nationFragment2"
         android:name="com.example.myfriend.view.nation.NationFragment"
         android:label="NationFragment" >
         <argument

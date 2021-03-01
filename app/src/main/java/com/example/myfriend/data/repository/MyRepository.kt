@@ -7,6 +7,8 @@ import com.example.myfriend.data.dataSource.LocalDataSource
 import com.example.myfriend.data.dataSource.RemoteDataSource
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.model.vo.Nation
+import com.example.myfriend.util.Event
+import com.example.myfriend.view.home.ListOrderType
 import java.util.regex.Pattern
 
 @SuppressLint("CheckResult")
@@ -62,19 +64,29 @@ class MyRepository(
     private val friendListResult = MutableLiveData<List<Friend>>()
     fun friendListResultObserve() = friendListResult
 
-    fun getFriendList(){
-        localDataSource.getFriendList().subscribe({
-            friendListResult.value = it
-        },{
+    fun getFriendList(listOrderType: ListOrderType) {
+        when (listOrderType) {
+            ListOrderType.NAME -> {
+                localDataSource.getFriendList().subscribe({
+                    friendListResult.value = it
+                }, {
 
-        })
+                })
+            }
+            ListOrderType.SEQ -> {
+                localDataSource.getFriendListSeq().subscribe({
+                    friendListResult.value = it
+                }, {
+
+                })
+            }
+        }
     }
 
     fun addFriend(friend : Friend){
         localDataSource.addFriend(friend).subscribe({
             Log.d(TAG, "친구 추가 성공 $it")
         },{
-
             Log.d(TAG, "친구 추가 실패 ${it}")
         })
     }
@@ -103,14 +115,18 @@ class MyRepository(
         }
     }
 
-    private val favoriteNationResult = MutableLiveData<com.example.myfriend.data.db.entity.Nation>()
+    private var favoriteNationResult  = MutableLiveData<com.example.myfriend.data.db.entity.Nation>()
     fun favoriteNationResultObserve() = favoriteNationResult
 
     fun getFavorite(nation : String){
         localDataSource.getFavorite(nation).subscribe({
-            favoriteNationResult.value = it
-        },{
-            favoriteNationResult.value = com.example.myfriend.data.db.entity.Nation("none","none")
+            if (it.isEmpty()) {
+                favoriteNationResult.value =
+                    com.example.myfriend.data.db.entity.Nation("none", "none")
+            } else {
+                favoriteNationResult.value = it[0]
+            }
+        }, {
             Log.d(TAG, "국가 즐겨찾기 불러오기 실패 ${it}")
         })
     }

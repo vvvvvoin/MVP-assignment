@@ -6,9 +6,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.model.vo.Nation
+import com.example.myfriend.util.Event
 import java.util.regex.Pattern
 
-class NationPresenter(private val myRepository: MyRepository) : NationContract.Presenter {
+class NationPresenter(
+    private val myRepository: MyRepository,
+    private var isAddEdit: Boolean = false
+) : NationContract.Presenter {
     private val TAG = "NationPresenter"
 
     private lateinit var view : NationContract.View
@@ -23,8 +27,8 @@ class NationPresenter(private val myRepository: MyRepository) : NationContract.P
     val nationFavorite: LiveData<com.example.myfriend.data.db.entity.Nation>
         get() = _nationFavorite
 
-    var isAddEdit : Boolean = false
     var clickedNation : String = ""
+    var clickedAlpha2Code : String = ""
 
     init {
         _searchNation.addSource(resultNationList) {
@@ -34,13 +38,13 @@ class NationPresenter(private val myRepository: MyRepository) : NationContract.P
             }
             _searchNation.value = it
         }
-
         _nationFavorite.addSource(resultNationFavorite){
-            Log.d(TAG, "이것이 반응해야한다")
-            if(it.nation == "none"){
-                view.showNationDetail(clickedNation, false)
-            }else{
-                view.showNationDetail(clickedNation, true)
+            Log.d(TAG, it.toString())
+            if(isAddEdit == false) {
+                val nation =
+                    com.example.myfriend.data.db.entity.Nation(clickedAlpha2Code, clickedNation)
+                if (it.nation == "none") nation.nation = nation.nation + "*"
+                _nationFavorite.value = nation
             }
         }
     }
@@ -51,12 +55,9 @@ class NationPresenter(private val myRepository: MyRepository) : NationContract.P
     }
 
     override fun openNationDetail(nation : Nation) {
-        //view에서 openNationDetail파라미터에 해당 국가 정보를 담은 것을 받은 후에
-        //repository에서 검색해서 나온 결과를
-        // view.showNationDetail 파라미터에 담아서 실행
-        clickedNation = nation.alpha2Code
-        myRepository.getFavorite(nation.name)
-
+        clickedNation = nation.name
+        clickedAlpha2Code = nation.alpha2Code
+        myRepository.getFavorite(nation.alpha2Code)
     }
 
     override fun searchNation(query: String) {

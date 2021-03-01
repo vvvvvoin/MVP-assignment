@@ -5,8 +5,8 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfriend.model.vo.Nation
 
-@BindingAdapter("item_list")
-fun setBookList(
+@BindingAdapter("nationItemList")
+fun setNationItemList(
     recyclerView: RecyclerView,
     item: ArrayList<Nation>?
 ) {
@@ -21,7 +21,6 @@ fun setBookList(
         if(searchAdapter.nationList == it) return
         searchAdapter.nationList.clear()
         searchAdapter.nationList =  it
-        Log.d("asdasdasdasdasd", "바뀐거기시는 = ${it.toString()}")
         searchAdapter.notifyDataSetChanged()
     }
 }

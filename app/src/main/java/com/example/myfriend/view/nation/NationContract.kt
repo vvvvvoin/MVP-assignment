@@ -5,7 +5,7 @@ import com.example.myfriend.model.vo.Nation
 interface NationContract {
     interface View {
         fun setPresenter(presenter: Presenter)
-        fun showNationDetail(data : String, check : Boolean)
+        fun showNationDetail(data : com.example.myfriend.data.db.entity.Nation, check : Boolean)
         fun errorMessage(error : String)
     }
 
