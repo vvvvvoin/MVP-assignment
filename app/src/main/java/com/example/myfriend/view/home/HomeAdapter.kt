@@ -1,16 +1,13 @@
 package com.example.myfriend.view.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
+import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.databinding.ItemFirendBinding
-import com.example.myfriend.databinding.ItemNationBinding
-import com.example.myfriend.model.vo.Nation
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,11 +15,17 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
     var friendList = ArrayList<Friend>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ItemHolder(ItemFirendBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
-            mPresenter
-        }
+        ItemHolder(ItemFirendBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
+            presenter = mPresenter
+        })
+
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+        homeItemListener?.let {
+            holder.layout.setOnClickListener {
+                homeItemListener?.onClickListener(it, friendList[position])
+            }
+        }
         holder.bind(friendList[position])
     }
 
@@ -32,10 +35,32 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
 
     inner class ItemHolder(private val binding: ItemFirendBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        var layout = binding.layout
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: Friend) {
             binding.data = item
+            if (item.number.equals("")) {
+                binding.friendCallText.text = item.email
+            } else if (item.email.equals("")) {
+                binding.friendCallText.text = item.number
+            }else{
+                binding.friendCallText.text = item.number + ", " +  item.email
+            }
         }
     }
 
+    var homeItemListener: HomeItemListener? = null
+
+    interface HomeItemListener {
+        fun onClickListener(view: View, friend: Friend)
+    }
+
+    fun onItemClick(listener: (view: View, friend: Friend) -> Unit) {
+        homeItemListener = object : HomeItemListener {
+            override fun onClickListener(view: View, friend: Friend) {
+                listener(view, friend)
+            }
+        }
+    }
 }

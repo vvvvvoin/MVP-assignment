@@ -7,7 +7,7 @@ import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.db.entity.Tag
 
-@Database(entities = [(Nation::class), (Tag::class), (Friend::class)], version = 1)
+@Database(entities = [(Nation::class), (Friend::class), (Tag::class)], version = 1)
 abstract class MyDataBase : RoomDatabase(){
     abstract fun myDataBaseDao() : MyDao
 }

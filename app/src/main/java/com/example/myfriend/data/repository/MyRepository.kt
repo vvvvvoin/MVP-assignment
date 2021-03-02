@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.myfriend.data.dataSource.LocalDataSource
 import com.example.myfriend.data.dataSource.RemoteDataSource
 import com.example.myfriend.data.db.entity.Friend
-import com.example.myfriend.model.vo.Nation
-import com.example.myfriend.util.Event
+import com.example.myfriend.data.db.entity.Nation
+import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.view.home.ListOrderType
 import java.util.regex.Pattern
 
@@ -19,7 +19,7 @@ class MyRepository(
     private val TAG = "MyRepository"
 
     //remote
-    private val nationListResult = MutableLiveData<ArrayList<Nation>>()
+    private val nationListResult = MutableLiveData<ArrayList<NationW>>()
     fun nationListResultObserve() = nationListResult
 
     private var lastSearchQuery : String = ""
@@ -99,7 +99,7 @@ class MyRepository(
         })
     }
 
-    fun setFavorite(nation : com.example.myfriend.data.db.entity.Nation, check : Boolean){
+    fun setFavorite(nation : Nation, check : Boolean){
         if(check == true){
             localDataSource.setFavorite(nation).subscribe({
                 Log.d(TAG, "국가 즐겨찾기 삽입 성공 $it")
@@ -115,14 +115,14 @@ class MyRepository(
         }
     }
 
-    private var favoriteNationResult  = MutableLiveData<com.example.myfriend.data.db.entity.Nation>()
+    private var favoriteNationResult  = MutableLiveData<Nation>()
     fun favoriteNationResultObserve() = favoriteNationResult
 
     fun getFavorite(nation : String){
         localDataSource.getFavorite(nation).subscribe({
             if (it.isEmpty()) {
                 favoriteNationResult.value =
-                    com.example.myfriend.data.db.entity.Nation("none", "none")
+                    Nation("none", "none")
             } else {
                 favoriteNationResult.value = it[0]
             }

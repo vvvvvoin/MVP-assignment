@@ -37,7 +37,7 @@ class LocalDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
     fun updateFriend(friend: Friend): Single<Int> {
-        return myDao.updateFriend(friend)
+        return myDao.updateFriend(friend.id, friend.name, friend.number, friend.email, friend.flagUri, friend.nation, friend.profile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

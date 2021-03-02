@@ -1,19 +1,23 @@
 package com.example.myfriend.view.home.detail
 
+import android.util.Log
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.example.myfriend.R
 import java.util.*
 
 
 @BindingAdapter("setProfile")
 fun setProfileImage(view: ImageView, uri: String?) {
-    uri?.let {
+    if(uri != "null" && uri != null ){
         Glide.with(view.context)
-            .load(it.toUri())
+            .load(uri.toUri())
             .into(view)
+    }else{
+        Glide.with(view.context).load(R.drawable.ic_default_prefile).into(view)
     }
 }
 

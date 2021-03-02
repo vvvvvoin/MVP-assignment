@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFriend">
-        <activity android:name=".view.nation.detail.NationDetailActivity"></activity>
+        <activity android:name=".view.home.addEdit.AddEditActivity"></activity>
+        <activity android:name=".view.home.detail.DetailActivity" />
+        <activity android:name=".view.nation.detail.NationDetailActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

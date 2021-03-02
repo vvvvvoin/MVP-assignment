@@ -25,8 +25,16 @@ interface MyDao {
     @Insert
     fun insertFriend(friend : Friend) : Single<Long>
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateFriend(friend : Friend) : Single<Int>
+    @Query("UPDATE friend SET name = :name, number = :number, email = :email, flagUri = :flagUri, nation = :nation, profile = :profile WHERE id = :id")
+    fun updateFriend(
+        id: String,
+        name : String,
+        number: String? = "",
+        email: String? = "",
+        flagUri: String,
+        nation: String,
+        profile: String? = ""
+    ): Single<Int>
 
     @Query("SELECT * FROM friend ORDER BY name")
     fun getFriendList() : Single<List<Friend>>

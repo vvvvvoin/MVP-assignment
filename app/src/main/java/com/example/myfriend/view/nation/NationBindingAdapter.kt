@@ -1,14 +1,13 @@
 package com.example.myfriend.view.nation
 
-import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfriend.model.vo.Nation
+import com.example.myfriend.data.dataSource.remoteData.NationW
 
 @BindingAdapter("nationItemList")
 fun setNationItemList(
     recyclerView: RecyclerView,
-    item: ArrayList<Nation>?
+    item: ArrayList<NationW>?
 ) {
     val searchAdapter :NationAdapter
 

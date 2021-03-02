@@ -1,29 +1,16 @@
 package com.example.myfriend.view.home.detail
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
+
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.databinding.FragmentAddEditBinding
 import com.example.myfriend.databinding.FragmentDetailBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.ext.android.inject
-import java.util.*
 
 
 class DetailFragment : Fragment(), DetailContract.View {
@@ -35,6 +22,7 @@ class DetailFragment : Fragment(), DetailContract.View {
     private var bottomNavigationView : BottomNavigationView? = null
 
     private val myRepository: MyRepository by inject()
+    //private val args : DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,11 +36,8 @@ class DetailFragment : Fragment(), DetailContract.View {
         mPresenter.setView(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
+       // binding.data = args.friend
         val view = binding.root
-
-        binding.flagImageView.setOnClickListener {
-
-        }
 
         setHasOptionsMenu(true)
         return view
@@ -61,7 +46,7 @@ class DetailFragment : Fragment(), DetailContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.detail_edit_btn -> {
-
+                //addEdit으로 넘기는 args로서
             }
         }
         return true

@@ -4,6 +4,8 @@ interface HomeContract {
     interface View {
         fun setPresenter(presenter: Presenter)
         fun errorMessage(error : String)
+        fun openNumberApp(number : String)
+        fun openEmailApp(toEmail : String)
     }
 
     interface Presenter {

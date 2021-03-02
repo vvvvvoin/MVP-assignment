@@ -19,22 +19,5 @@
         android:name="com.example.myfriend.view.home.addEdit.AddEditFragment"
         android:label="fragment_add_edit"
         tools:layout="@layout/fragment_add_edit">
-        <argument
-            android:name="friend_id"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
-        <action
-            android:id="@+id/action_addEditFragment_to_nationFragment3"
-            app:destination="@id/nationFragment2" />
-    </fragment>
-    <fragment
-        android:id="@+id/nationFragment2"
-        android:name="com.example.myfriend.view.nation.NationFragment"
-        android:label="NationFragment" >
-        <argument
-            android:name="isAddOrEdit"
-            app:argType="boolean"
-            android:defaultValue="false"/>
     </fragment>
 </navigation>

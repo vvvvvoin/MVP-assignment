@@ -3,11 +3,9 @@ package com.example.myfriend.view.nation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.model.vo.Nation
-import com.example.myfriend.util.Event
-import java.util.regex.Pattern
+import com.example.myfriend.data.dataSource.remoteData.NationW
+import com.example.myfriend.data.db.entity.Nation
 
 class NationPresenter(
     private val myRepository: MyRepository,
@@ -19,16 +17,16 @@ class NationPresenter(
     private val resultNationList = myRepository.nationListResultObserve()
     private val resultNationFavorite = myRepository.favoriteNationResultObserve()
 
-    private val _searchNation = MediatorLiveData<ArrayList<Nation>>()
-    val searchNation: LiveData<ArrayList<Nation>>
+    private val _searchNation = MediatorLiveData<ArrayList<NationW>>()
+    val searchNationW: LiveData<ArrayList<NationW>>
         get() = _searchNation
 
-    private val _nationFavorite = MediatorLiveData<com.example.myfriend.data.db.entity.Nation>()
-    val nationFavorite: LiveData<com.example.myfriend.data.db.entity.Nation>
+    private val _nationFavorite = MediatorLiveData<Nation>()
+    val nationFavorite: LiveData<Nation>
         get() = _nationFavorite
 
-    var clickedNation : String = ""
-    var clickedAlpha2Code : String = ""
+    private var clickedNation : String = ""
+    private var clickedAlpha2Code : String = ""
 
     init {
         _searchNation.addSource(resultNationList) {
@@ -41,8 +39,7 @@ class NationPresenter(
         _nationFavorite.addSource(resultNationFavorite){
             Log.d(TAG, it.toString())
             if(isAddEdit == false) {
-                val nation =
-                    com.example.myfriend.data.db.entity.Nation(clickedAlpha2Code, clickedNation)
+                val nation = Nation(clickedAlpha2Code, clickedNation)
                 if (it.nation == "none") nation.nation = nation.nation + "*"
                 _nationFavorite.value = nation
             }
@@ -54,10 +51,10 @@ class NationPresenter(
         this.view.setPresenter(this)
     }
 
-    override fun openNationDetail(nation : Nation) {
-        clickedNation = nation.name
-        clickedAlpha2Code = nation.alpha2Code
-        myRepository.getFavorite(nation.alpha2Code)
+    override fun openNationDetail(nationW : NationW) {
+        clickedNation = nationW.name
+        clickedAlpha2Code = nationW.alpha2Code
+        myRepository.getFavorite(nationW.alpha2Code)
     }
 
     override fun searchNation(query: String) {

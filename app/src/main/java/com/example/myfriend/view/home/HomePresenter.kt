@@ -1,18 +1,10 @@
 package com.example.myfriend.view.home
 
-import android.content.Intent
 import android.util.Log
-import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.di.repository
-import com.example.myfriend.model.vo.Nation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class HomePresenter(private val myRepository: MyRepository) : HomeContract.Presenter {
     private val TAG = "HomePresenter"
@@ -27,6 +19,7 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
     init {
         myRepository.getFriendList(ListOrderType.NAME)
         _friendList.addSource(resultNationList){
+            Log.d(TAG, it.toString())
             _friendList.value = it
         }
 
@@ -39,6 +32,16 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
 
     override fun setOrder(listOrderType: ListOrderType) {
         myRepository.getFriendList(listOrderType)
+    }
+
+    fun openNumberApp(number : String?){
+        if(number != null)
+            view.openNumberApp(number)
+    }
+
+    fun openEmailApp(email : String?){
+        if(email != null)
+            view.openEmailApp(email)
     }
 
 }

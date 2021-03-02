@@ -22,7 +22,7 @@ class AddEditPresenter(private val myRepository: MyRepository, private val mId :
         if(mId == null){
             myRepository.addFriend(Friend(name, number, email, flag, nation, profile))
         }else{
-            myRepository.updateFriend(Friend(mId, name, number, email, flag, nation, profile))
+            myRepository.updateFriend(Friend(0, mId, name, number, email, flag, nation, profile))
         }
         view.completeAddEdit()
     }

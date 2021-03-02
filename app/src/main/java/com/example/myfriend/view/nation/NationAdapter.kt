@@ -10,17 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.example.myfriend.databinding.ItemNationBinding
-import com.example.myfriend.model.vo.Nation
-import com.example.myfriend.util.SvgLoader
+import com.example.myfriend.data.dataSource.remoteData.NationW
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class NationAdapter(
-    private val context: Context,
-) : RecyclerView.Adapter<NationAdapter.ItemHolder>() {
+class NationAdapter : RecyclerView.Adapter<NationAdapter.ItemHolder>() {
 
-    var nationList = ArrayList<Nation>()
+    var nationList = ArrayList<NationW>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)=
         ItemHolder(ItemNationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
@@ -42,7 +39,7 @@ class NationAdapter(
         val layout = binding.itemLayout
         val imageView: ImageView = binding.nationImage
 
-        fun bind(item: Nation) {
+        fun bind(item: NationW) {
             imageView.run {
                 val uri = ("https://flagcdn.com/h80/" + item.alpha2Code.toLowerCase(Locale.ROOT) +".png").toUri()
                 Glide.with(context).load(uri).override(Target.SIZE_ORIGINAL).into(this)
@@ -53,13 +50,13 @@ class NationAdapter(
 
     var nationItemListener : NationItemListener? = null
     interface NationItemListener{
-        fun onClickListener(view : View, nation : Nation)
+        fun onClickListener(view : View, nationW : NationW)
     }
 
-    fun onItemClick(listener: (view : View, nation : Nation) -> Unit) {
+    fun onItemClick(listener: (view : View, nationW : NationW) -> Unit) {
         nationItemListener = object : NationItemListener{
-            override fun onClickListener(view: View, nation: Nation) {
-                listener(view, nation)
+            override fun onClickListener(view: View, nationW: NationW) {
+                listener(view, nationW)
             }
         }
     }

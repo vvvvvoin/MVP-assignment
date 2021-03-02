@@ -8,7 +8,7 @@
             type="com.example.myfriend.view.nation.NationPresenter" />
         <variable
             name="item"
-            type="com.example.myfriend.model.vo.Nation" />
+            type="com.example.myfriend.data.dataSource.remoteData.NationW" />
     </data>
 
     <LinearLayout
