@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
+import com.example.myfriend.data.db.entity.Tag
 import io.reactivex.Single
 
 
@@ -11,7 +12,9 @@ import io.reactivex.Single
 interface MyDao {
 
     //nationFavorite
-    @Query("SELECT * FROM nation WHERE alpha2Code = :name")
+    @Query("SELECT * " +
+            "FROM nation " +
+            "WHERE alpha2Code = :name")
     fun getFavorite(name : String) : Single<List<Nation>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -19,7 +22,6 @@ interface MyDao {
 
     @Delete
     fun deFavorite(nation : Nation ) : Single<Int>
-
 
     //friend
     @Insert
@@ -42,12 +44,45 @@ interface MyDao {
     @Query("SELECT * FROM friend ORDER BY seq")
     fun getFriendListSeq() : Single<List<Friend>>
 
-/*    @Query("SELECT * FROM friend ORDER BY name")
-    fun getFriendListObservable() :  LiveData<List<Friend>>
+    //order by 에 값은 명시적으로 입력해야됨 파라미터값으로 왜 안됨?
+    @Query("SELECT * FROM (" +
+            "SELECT * FROM friend WHERE name LIKE :query " +
+            "UNION " +
+            "SELECT * FROM friend WHERE number LIKE :query " +
+            "UNION " +
+            "SELECT * FROM friend WHERE email LIKE :query) " +
+            "ORDER BY NAME")
+    fun getFriendListWithQuery(query : String) : Single<List<Friend>>
 
-    @Query("SELECT * FROM friend ORDER BY seq")
-    fun getFriendListOrderBySeq() : List<Friend>
+    @Query("SELECT * FROM (" +
+            "SELECT * FROM friend WHERE name LIKE :query " +
+            "UNION " +
+            "SELECT * FROM friend WHERE number LIKE :query " +
+            "UNION " +
+            "SELECT * FROM friend WHERE email LIKE :query) " +
+            "ORDER BY SEQ")
+    fun getFriendListWithQuerySeq(query : String) : Single<List<Friend>>
 
-    @Query("SELECT * FROM friend ORDER BY seq")
-    fun getFriendListOrderBySeqObservable() : LiveData<List<Friend>>*/
+
+    //tag
+    @Query("SELECT * " +
+            "FROM tag " +
+            "WHERE tagName LIKE :query " +
+            "ORDER BY tagName")
+    fun getTagListWithQuery(query : String) : Single<List<Tag>>
+
+    @Query("SELECT * " +
+            "FROM tag " +
+            "WHERE tagName LIKE :query " +
+            "ORDER BY seq")
+    fun getTagListWithQuerySeq(query : String) : Single<List<Tag>>
+
+    @Query("SELECT * FROM Tag WHERE friendId = :friendId")
+    fun getTagList(friendId: String) : Single<List<Tag>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTag(tag : List<Tag>): Single<List<Long>>
+
+    @Query("DELETE  FROM Tag WHERE friendId = :friendId")
+    fun deleteTag(friendId : String): Single<Int>
 }

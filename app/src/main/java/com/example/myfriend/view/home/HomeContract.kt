@@ -10,6 +10,7 @@ interface HomeContract {
 
     interface Presenter {
         fun setView(view: View)
-        fun setOrder(listOrderType : ListOrderType)
+        fun setOrder(orderType : ListOrderType)
+        fun searchWithQuery(query : String)
     }
 }

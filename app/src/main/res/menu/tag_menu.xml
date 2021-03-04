@@ -8,12 +8,12 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/order_name"
+        android:id="@+id/order_name_tag"
         android:title="이름순"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/order_seq"
+        android:id="@+id/order_seq_tag"
         android:title="등록순"
         app:showAsAction="never" />
 </menu>

@@ -32,7 +32,7 @@ class DetailFragment : Fragment(), DetailContract.View {
         bottomNavigationView?.let {
             it.visibility = View.GONE
         }
-        mPresenter = DetailPresenter(myRepository)
+        //mPresenter = DetailPresenter(myRepository)
         mPresenter.setView(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
@@ -61,6 +61,14 @@ class DetailFragment : Fragment(), DetailContract.View {
     }
 
     override fun errorMessage(error: String) {
+
+    }
+
+    override fun openNumberApp(number: String) {
+
+    }
+
+    override fun openEmailApp(toEmail: String) {
 
     }
 }

@@ -11,11 +11,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.MyFriend">
-        <activity android:name=".view.home.addEdit.AddEditActivity"></activity>
+        <activity android:name=".view.home.addEdit.AddEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".view.home.detail.DetailActivity" />
         <activity android:name=".view.nation.detail.NationDetailActivity" />
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustResize|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,6 +1,5 @@
 package com.example.myfriend.view.home
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,16 +8,14 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentHomeBinding
 import com.example.myfriend.view.home.addEdit.AddEditActivity
-import com.example.myfriend.view.home.addEdit.AddEditFragment
 import com.example.myfriend.view.home.detail.DetailActivity
-import com.example.myfriend.view.nation.NationAdapter
-import com.example.myfriend.view.nation.detail.NationDetailActivity
+import com.jakewharton.rxbinding4.widget.textChanges
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 
 class HomeFragment : Fragment(), HomeContract.View {
@@ -32,6 +29,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         HomeAdapter(mPresenter as HomePresenter)
     }
 
+    private var defaultListOrderType = ListOrderType.NAME
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,21 +49,29 @@ class HomeFragment : Fragment(), HomeContract.View {
             setPresenter(mPresenter)
             setHasFixedSize(true)
         }
+
         homeAdapter.onItemClick { view, friend ->
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_FRIEND_DATA, friend)
             requestActivity.launch(intent)
         }
 
+        binding.searchEditText.textChanges()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+                mPresenter.searchWithQuery(it.toString())
+            }
+
         setHasOptionsMenu(true)
         return view
     }
 
-    val requestActivity = registerForActivityResult(
+    private val requestActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
         if(activityResult.resultCode == AddEditActivity.EDIT_RESULT_OK){
-            myRepository.getFriendList(ListOrderType.NAME)
+            myRepository.getFriendList(defaultListOrderType)
         }
     }
 
@@ -77,9 +83,11 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
             R.id.order_name ->{
                 mPresenter.setOrder(ListOrderType.NAME)
+                defaultListOrderType = ListOrderType.NAME
             }
             R.id.order_seq -> {
                 mPresenter.setOrder(ListOrderType.SEQ)
+                defaultListOrderType = ListOrderType.SEQ
             }
         }
         return true

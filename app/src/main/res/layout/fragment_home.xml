@@ -33,6 +33,7 @@
             android:layout_marginRight="15dp"
             android:gravity="left|center"
             android:hint="search"
+            android:maxLines="1"
             android:singleLine="true"
             android:textColorHint="@color/gray"
             app:layout_constraintBottom_toBottomOf="@+id/search_ic"

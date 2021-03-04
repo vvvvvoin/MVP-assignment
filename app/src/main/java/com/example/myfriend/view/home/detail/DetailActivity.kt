@@ -2,6 +2,7 @@ package com.example.myfriend.view.home.detail
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -11,9 +12,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import com.example.myfriend.R
 import com.example.myfriend.data.db.entity.Friend
+import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.ActivityDetailBinding
+import com.example.myfriend.view.home.HomeAdapter
+import com.example.myfriend.view.home.HomePresenter
 import com.example.myfriend.view.home.addEdit.AddEditActivity
+import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
 import com.example.myfriend.view.nation.detail.NationDetailActivity
 import org.koin.android.ext.android.inject
 
@@ -22,14 +27,48 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
     private lateinit var mPresenter: DetailContract.Presenter
     companion object{
         const val EXTRA_FRIEND_DATA = "extraFriendData"
+        const val EXTRA_TAG_DATA = "extraTagData"
     }
 
     private val myRepository: MyRepository by inject()
+    private val tagAdapter: AddEditTagAdapter by lazy {
+        AddEditTagAdapter(false)
+    }
 
     private lateinit var binding : ActivityDetailBinding
     private lateinit var friendData : Friend
+    private lateinit var tagList : ArrayList<Tag>
 
-    val requestActivity = registerForActivityResult(
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        friendData = intent.getParcelableExtra(EXTRA_FRIEND_DATA)!!
+
+        mPresenter = DetailPresenter(myRepository, friendData.id)
+        mPresenter.setView(this)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
+        binding.apply {
+            lifecycleOwner = this@DetailActivity
+            presenter = mPresenter as DetailPresenter
+            data = friendData
+        }
+
+        binding.tagItemRecycler.apply {
+            adapter = tagAdapter
+            setHasFixedSize(true)
+        }
+
+        (mPresenter as DetailPresenter).tagList.observe(this, {
+            tagList = it as ArrayList<Tag>
+            tagAdapter.tagList = it
+            tagAdapter.notifyDataSetChanged()
+        })
+
+        setSupportActionBar(findViewById(R.id.detail_home_toolbar))
+
+    }
+
+    private val requestActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
         // action to do something
@@ -39,24 +78,12 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
-        setSupportActionBar(findViewById(R.id.detail_home_toolbar))
-
-        friendData = intent.getParcelableExtra(EXTRA_FRIEND_DATA)!!
-        binding.data = friendData
-
-        mPresenter = DetailPresenter(myRepository)
-        mPresenter.setView(this)
-
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.detail_edit_btn -> {
                 val intent = Intent(this, AddEditActivity::class.java)
                 intent.putExtra(EXTRA_FRIEND_DATA, friendData)
+                intent.putParcelableArrayListExtra(EXTRA_TAG_DATA, tagList)
                 requestActivity.launch(intent)
             }
         }
@@ -74,5 +101,17 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
 
     override fun errorMessage(error: String) {
 
+    }
+
+    override fun openNumberApp(number: String) {
+        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number)))
+    }
+
+    override fun openEmailApp(toEmail: String) {
+        val email = Intent(Intent.ACTION_SEND)
+        email.type = "plain/text"
+        val address = arrayOf(toEmail)
+        email.putExtra(Intent.EXTRA_EMAIL, address)
+        startActivity(email)
     }
 }

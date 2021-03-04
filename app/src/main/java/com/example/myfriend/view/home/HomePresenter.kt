@@ -10,19 +10,21 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
     private val TAG = "HomePresenter"
 
     private lateinit var view : HomeContract.View
-    private val resultNationList = myRepository.friendListResultObserve()
+    private val resultFriendList = myRepository.friendListResultObserve()
 
     private val _friendList = MediatorLiveData<List<Friend>>()
     val friendList: LiveData<List<Friend>>
         get() = _friendList
 
+    private var listOrderType  = ListOrderType.NAME
+    private var query = ""
+
     init {
-        myRepository.getFriendList(ListOrderType.NAME)
-        _friendList.addSource(resultNationList){
+        myRepository.getFriendList(listOrderType)
+        _friendList.addSource(resultFriendList){
             Log.d(TAG, it.toString())
             _friendList.value = it
         }
-
     }
 
     override fun setView(view: HomeContract.View) {
@@ -30,8 +32,18 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
         this.view.setPresenter(this)
     }
 
-    override fun setOrder(listOrderType: ListOrderType) {
-        myRepository.getFriendList(listOrderType)
+    override fun setOrder(orderType: ListOrderType) {
+        listOrderType = orderType
+        if(query.isNotEmpty()){
+            myRepository.getFriendListWithQuery(query, listOrderType)
+        }else{
+            myRepository.getFriendList(listOrderType)
+        }
+    }
+
+    override fun searchWithQuery(query: String) {
+        this.query = query
+        myRepository.getFriendListWithQuery(query, listOrderType)
     }
 
     fun openNumberApp(number : String?){
