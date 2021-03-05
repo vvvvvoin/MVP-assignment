@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_edit_btn"
-        android:title="check"
+        android:title="@string/confirm_btn"
         android:icon="@drawable/ic_baseline_check_24"
         app:showAsAction="always" />
     

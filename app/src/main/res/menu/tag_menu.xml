@@ -3,17 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/tag_check"
-        android:icon="@drawable/ic_baseline_check_24"
-        android:title="tag_check"
+        android:icon="@drawable/ic_double_check"
+        android:title="@string/tag_check_btn"
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/delete_btn"
+        android:icon="@drawable/ic_trash_can"
+        android:title="@string/delete_tag_btn"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/order_name_tag"
-        android:title="이름순"
+        android:title="@string/order_type_name"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/order_seq_tag"
-        android:title="등록순"
+        android:title="@string/order_type_seq"
         app:showAsAction="never" />
 </menu>

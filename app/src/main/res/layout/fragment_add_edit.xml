@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
-            android:hint="이름"
+            android:hint="@string/name"
             android:maxLines="1"
             android:text="@{data.name}"
             android:textSize="20sp" />
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
-            android:hint="010-1234-5678"
+            android:hint="@string/number"
             android:inputType="numberDecimal"
             android:maxLines="1"
             android:text="@{data.number}"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
-            android:hint="이메일"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:text="@{data.email}"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="국가"
+                android:hint="@string/nation"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="태그"
+                android:hint="@string/tag"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 

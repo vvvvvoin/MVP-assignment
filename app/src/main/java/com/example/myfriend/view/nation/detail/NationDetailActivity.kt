@@ -52,8 +52,6 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
         }
         Glide.with(this).load(uri).override(Target.SIZE_ORIGINAL).into(binding.nationImage)
 
-        Log.d(TAG, "받아온 데이터는 ${nationData}")
-        Log.d(TAG, "받아온 데이터는 ${isCheck}")
         invalidateOptionsMenu()
     }
 
@@ -89,6 +87,11 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
         return true
     }
 
+    override fun onDestroy() {
+        mPresenter.detachView()
+        super.onDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nation_detail_menu, menu)
         return true
@@ -99,6 +102,6 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
     }
 
     override fun errorMessage(error: String) {
-        TODO("Not yet implemented")
+
     }
 }

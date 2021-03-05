@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,6 +21,7 @@ import com.example.myfriend.view.home.HomePresenter
 import com.example.myfriend.view.home.addEdit.AddEditActivity
 import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
 import com.example.myfriend.view.nation.detail.NationDetailActivity
+import okhttp3.internal.toImmutableList
 import org.koin.android.ext.android.inject
 
 class DetailActivity : AppCompatActivity(), DetailContract.View {
@@ -48,7 +50,6 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
         binding.apply {
-            lifecycleOwner = this@DetailActivity
             presenter = mPresenter as DetailPresenter
             data = friendData
         }
@@ -59,13 +60,24 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
         }
 
         (mPresenter as DetailPresenter).tagList.observe(this, {
-            tagList = it as ArrayList<Tag>
-            tagAdapter.tagList = it
-            tagAdapter.notifyDataSetChanged()
+            Log.d(TAG, it.toString())
+            if(it.isEmpty()){
+                tagList = ArrayList()
+                tagAdapter.tagList = ArrayList()
+                tagAdapter.notifyDataSetChanged()
+            }else{
+                tagList = ArrayList(it)
+                tagAdapter.tagList = ArrayList(it)
+                tagAdapter.notifyDataSetChanged()
+            }
         })
 
         setSupportActionBar(findViewById(R.id.detail_home_toolbar))
+    }
 
+    override fun onDestroy() {
+        mPresenter.detachView()
+        super.onDestroy()
     }
 
     private val requestActivity = registerForActivityResult(

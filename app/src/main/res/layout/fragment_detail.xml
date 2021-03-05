@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="국가"
+                android:hint="@string/nation"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="태그"
+                android:hint="@string/tag"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 

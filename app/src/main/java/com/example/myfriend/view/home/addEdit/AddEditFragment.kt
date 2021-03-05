@@ -39,6 +39,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         const val NUMBER_REGEX = "^\\d{3}-\\d{3,4}-\\d{4}$"
         const val EMAIL_REGEX = "^[_a-zA-Z0-9-.]+@[.a-zA-Z0-9-]+\\.[a-zA-Z]+$"
+        const val TAG_REGEX = "^[_a-zA-Z0-9]+$"
     }
 
     private lateinit var mPresenter: AddEditContract.Presenter
@@ -52,6 +53,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
 
     private var receivedNationWData : NationW? = null
     private var receivedProfileUri : Uri? = null
+    private var receivedProfileUriOrigin : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +78,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
         if(friendData != null){
             receivedNationWData = NationW(name = friendData.name, alpha2Code = friendData.flagUri)
             receivedProfileUri = friendData.profile?.toUri()
+            receivedProfileUriOrigin = friendData.profile?.toUri()
         }
 
         mPresenter = AddEditPresenter(myRepository, friendData?.id)
@@ -89,7 +92,9 @@ class AddEditFragment : Fragment(), AddEditContract.View {
         }
 
         binding.addTagBtn.setOnClickListener {
-            showDialog()
+            if(addEditTagAdapter.tagList.size < 5)
+                showDialog()
+            else showMessage(getString(R.string.add_edit_tag_max))
         }
 
         val view = binding.root
@@ -125,6 +130,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
             receivedProfileUri = activityResult.data?.data
             receivedProfileUri?.let {
                 activity?.contentResolver?.takePersistableUriPermission(it, TASK_FLAG)
+
                 setProfileImage(receivedProfileUri, binding.profileImageView)
             }
         }
@@ -134,13 +140,17 @@ class AddEditFragment : Fragment(), AddEditContract.View {
         val editText = dialogView.findViewById<EditText>(R.id.custom_tag_dialog_edit)
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(dialogView)
-            .setTitle("태그")
-            .setMessage("태그를 입력하세요")
-            .setPositiveButton("확인") { dialogInterface, i ->
+            .setTitle(getString(R.string.add_edit_tag_dialog_title))
+            .setMessage(getString(R.string.add_edit_tag_dialog_message))
+            .setPositiveButton(getString(R.string.add_edit_tag_dialog_positive_btn)) { dialogInterface, i ->
+                if (!Pattern.matches(TAG_REGEX, editText.text.toString())) {
+                    errorMessage(getString(R.string.add_edit_tag_dialog_error))   //수정해야함~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~안나옴
+                    return@setPositiveButton
+                }
                 addEditTagAdapter.tagList.add(Tag(editText.text.toString()))
                 addEditTagAdapter.notifyDataSetChanged()
             }
-            .setNegativeButton("취소") { dialogInterface, i ->
+            .setNegativeButton(R.string.add_edit_tag_dialog_negative_btn) { dialogInterface, i ->
             }
             .show()
     }
@@ -166,20 +176,20 @@ class AddEditFragment : Fragment(), AddEditContract.View {
                     val flagUri = receivedNationWData!!.alpha2Code
                     val nation = receivedNationWData!!.name
                     if (name.isEmpty()) {
-                        showMessage("이름입력은 필수 입니다.")
+                        showMessage(getString(R.string.add_edit_tag_necessary_name))
                         return true
                     } else if (number.isNotEmpty() && !Pattern.matches(NUMBER_REGEX, number)) {
-                        showMessage("올바른 번호 형식으로 입력해주세요.")
+                        showMessage(getString(R.string.add_edit_tag_correct_number))
                         return true
                     } else if (number.isEmpty() && email.isEmpty()) {
-                        showMessage("전화번호와 이메일 중 하나는 반드시 입력해야합니다.")
+                        showMessage(getString(R.string.add_edit_tag_necessary_number_or_email))
                         return true
                     } else if (email.isNotEmpty() && !Pattern.matches(EMAIL_REGEX, email)) {
-                        showMessage("올바른 이메일 형식으로 입력해주세요.")
+                        showMessage(getString(R.string.add_edit_tag_correct_email))
                         return true
                     }
                     //권한부여
-                    if(profileUri != null && profileUri.toString() != "null"){
+                    if(profileUri != null && profileUri.toString() != "null" && receivedProfileUriOrigin != receivedProfileUri){
                         activity?.contentResolver?.takePersistableUriPermission(
                             profileUri,
                             TASK_FLAG
@@ -187,12 +197,16 @@ class AddEditFragment : Fragment(), AddEditContract.View {
                     }
                     mPresenter.addEdit(name, number, email, flagUri, nation, profileUri.toString(), addEditTagAdapter.tagList)
                 } else {
-                    showMessage("국가선택은 필수 입니다.")
+                    showMessage(getString(R.string.add_edit_tag_necessary_nation))
                     return true
                 }
             }
         }
         return true
+    }
+    override fun onDestroyView() {
+        mPresenter.detachView()
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

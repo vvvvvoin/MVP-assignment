@@ -21,7 +21,7 @@ fun setTagItemList(
     item?.let {
         if(tagAdapter.tagList == it) return
         tagAdapter.tagList.clear()
-        tagAdapter.tagList =  it as ArrayList<Tag>
+        tagAdapter.tagList =  ArrayList(it)
         tagAdapter.notifyDataSetChanged()
     }
 }

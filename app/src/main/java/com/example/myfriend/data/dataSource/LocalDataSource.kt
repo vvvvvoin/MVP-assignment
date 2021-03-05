@@ -4,6 +4,7 @@ import com.example.myfriend.data.db.MyDataBase
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.db.entity.Tag
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,6 +83,12 @@ class LocalDataSource(
 
     fun deleteTag(friendId : String): Single<Int> {
         return myDao.deleteTag(friendId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun deleteTagInTagTab(tagName : String): Single<Int> {
+        return myDao.deleteTagInTagTab(tagName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

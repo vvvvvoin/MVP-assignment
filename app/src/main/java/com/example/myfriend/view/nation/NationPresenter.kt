@@ -13,7 +13,7 @@ class NationPresenter(
 ) : NationContract.Presenter {
     private val TAG = "NationPresenter"
 
-    private lateinit var view : NationContract.View
+    private var view : NationContract.View? = null
     private val resultNationList = myRepository.nationListResultObserve()
     private val resultNationFavorite = myRepository.favoriteNationResultObserve()
 
@@ -48,7 +48,13 @@ class NationPresenter(
 
     override fun setView(view: NationContract.View) {
         this.view = view
-        this.view.setPresenter(this)
+        this.view!!.setPresenter(this)
+    }
+
+    override fun detachView() {
+        view = null
+        _nationFavorite.removeSource(resultNationFavorite)
+        _searchNation.removeSource(resultNationList)
     }
 
     override fun openNationDetail(nationW : NationW) {

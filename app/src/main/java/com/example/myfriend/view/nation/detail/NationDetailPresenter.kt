@@ -8,7 +8,7 @@ import com.example.myfriend.data.repository.MyRepository
 class NationDetailPresenter(private val myRepository: MyRepository) : NationDetailContract.Presenter {
     private val TAG = "NationPresenter"
 
-    private lateinit var view : NationDetailContract.View
+    private var view : NationDetailContract.View? = null
 
 
     init {
@@ -18,7 +18,11 @@ class NationDetailPresenter(private val myRepository: MyRepository) : NationDeta
 
     override fun setView(view: NationDetailContract.View) {
         this.view = view
-        this.view.setPresenter(this)
+        this.view!!.setPresenter(this)
+    }
+
+    override fun detachView() {
+        view = null
     }
 
     override fun setFavorite(nation: Nation, check : Boolean) {

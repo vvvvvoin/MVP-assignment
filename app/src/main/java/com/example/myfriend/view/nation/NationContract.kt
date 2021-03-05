@@ -12,6 +12,7 @@ interface NationContract {
 
     interface Presenter {
         fun setView(view: View)
+        fun detachView()
         fun openNationDetail(nationW : NationW)
         fun searchNation(query: String)
     }

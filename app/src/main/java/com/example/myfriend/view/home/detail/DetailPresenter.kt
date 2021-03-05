@@ -9,7 +9,7 @@ import com.example.myfriend.data.repository.MyRepository
 class DetailPresenter(private val myRepository: MyRepository, private val friendId : String) : DetailContract.Presenter {
     private val TAG = "DetailPresenter"
 
-    private lateinit var view : DetailContract.View
+    private var view : DetailContract.View? = null
 
     private val resultTagList = myRepository.detailViewTagListObserve()
 
@@ -28,17 +28,22 @@ class DetailPresenter(private val myRepository: MyRepository, private val friend
 
     override fun setView(view: DetailContract.View) {
         this.view = view
-        this.view.setPresenter(this)
+        this.view!!.setPresenter(this)
+    }
+
+    override fun detachView() {
+        view = null
+        _tagList.removeSource(resultTagList)
     }
 
     fun openNumberApp(number : String?){
         if(number != null)
-            view.openNumberApp(number)
+            view?.openNumberApp(number)
     }
 
     fun openEmailApp(email : String?){
         if(email != null)
-            view.openEmailApp(email)
+            view?.openEmailApp(email)
     }
 
 }

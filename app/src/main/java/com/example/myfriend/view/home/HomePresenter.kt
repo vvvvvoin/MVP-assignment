@@ -9,7 +9,7 @@ import com.example.myfriend.data.repository.MyRepository
 class HomePresenter(private val myRepository: MyRepository) : HomeContract.Presenter {
     private val TAG = "HomePresenter"
 
-    private lateinit var view : HomeContract.View
+    private var view : HomeContract.View? = null
     private val resultFriendList = myRepository.friendListResultObserve()
 
     private val _friendList = MediatorLiveData<List<Friend>>()
@@ -22,6 +22,7 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
     init {
         myRepository.getFriendList(listOrderType)
         _friendList.addSource(resultFriendList){
+            Log.d(TAG, this.toString())
             Log.d(TAG, it.toString())
             _friendList.value = it
         }
@@ -29,7 +30,12 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
 
     override fun setView(view: HomeContract.View) {
         this.view = view
-        this.view.setPresenter(this)
+        this.view!!.setPresenter(this)
+    }
+
+    override fun detachView() {
+        this.view = null
+        _friendList.removeSource(resultFriendList)
     }
 
     override fun setOrder(orderType: ListOrderType) {
@@ -48,12 +54,12 @@ class HomePresenter(private val myRepository: MyRepository) : HomeContract.Prese
 
     fun openNumberApp(number : String?){
         if(number != null)
-            view.openNumberApp(number)
+            view?.openNumberApp(number)
     }
 
     fun openEmailApp(email : String?){
         if(email != null)
-            view.openEmailApp(email)
+            view?.openEmailApp(email)
     }
 
 }

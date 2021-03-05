@@ -1,8 +1,10 @@
 package com.example.myfriend.view.tag
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.myfriend.R
@@ -11,9 +13,11 @@ import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentNationBinding
 import com.example.myfriend.databinding.FragmentTagBinding
 import com.example.myfriend.view.home.ListOrderType
+import com.example.myfriend.view.home.detail.DetailActivity
 import com.example.myfriend.view.nation.NationContract
 import com.example.myfriend.view.nation.NationFragment
 import com.example.myfriend.view.nation.NationPresenter
+import com.example.myfriend.view.tag.detail.TagDetailActivity
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -27,9 +31,10 @@ class TagFragment : Fragment(), TagContract.View{
     private val myRepository: MyRepository by inject()
 
     private var defaultListOrderType = ListOrderType.NAME
+    private var deleteMode = false
 
     private val tagAdapter : TagAdapter by lazy {
-        TagAdapter()
+        TagAdapter(requireContext())
     }
 
     override fun onCreateView(
@@ -55,11 +60,43 @@ class TagFragment : Fragment(), TagContract.View{
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
-                mPresenter.searchTag(it.toString())
+                if(it.isNullOrEmpty()){
+                    //공백으로 만들기
+                    mPresenter.searchTag("")
+                }else{
+                    mPresenter.searchTag(it.toString())
+                }
             }
 
+        tagAdapter.onTagItemLongClick { view, tag ->
+            deleteMode = true
+            activity?.invalidateOptionsMenu()
+        }
+
+        tagAdapter.onTagItemClick { view, tag ->
+            if(!deleteMode){
+                val intent = Intent(context, TagDetailActivity::class.java)
+                intent.putExtra(TagDetailActivity.EXTRA_TAG_NAME, tag.tagName)
+                startActivity(intent)
+            }
+        }
+
+
         setHasOptionsMenu(true)
+        activity?.invalidateOptionsMenu()
         return view
+    }
+
+    private fun setDeleteMode(boolean: Boolean){
+        if(!boolean) binding.searchEditText.text.clear()
+        deleteMode = boolean
+        tagAdapter.setDeleteMode(boolean)
+    }
+
+    override fun onDestroyView() {
+        tagAdapter.clear()
+        mPresenter.detachView()
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,7 +105,18 @@ class TagFragment : Fragment(), TagContract.View{
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.tag_check -> {}
+            R.id.tag_check -> {
+                if(binding.searchEditText.text.toString().isEmpty()) return true
+                setDeleteMode(true)
+                activity?.invalidateOptionsMenu()
+            }
+            R.id.delete_btn -> {
+                mPresenter.deleteTag(tagAdapter.tagList)
+                tagAdapter.tagList.clear()
+                tagAdapter.notifyDataSetChanged()
+                setDeleteMode(false)
+                activity?.invalidateOptionsMenu()
+            }
             R.id.order_name_tag -> {
                 mPresenter.setOrder(ListOrderType.NAME)
                 defaultListOrderType = ListOrderType.NAME
@@ -79,6 +127,25 @@ class TagFragment : Fragment(), TagContract.View{
             }
         }
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val checkBtn = menu.findItem(R.id.tag_check)
+        val deleteBtn = menu.findItem(R.id.delete_btn)
+        val nameOrderBtn= menu.findItem(R.id.order_name_tag)
+        val seqOrderBtn= menu.findItem(R.id.order_seq_tag)
+
+        if(deleteMode == false){
+            checkBtn.isVisible = true
+            nameOrderBtn.isVisible = true
+            seqOrderBtn.isVisible = true
+            deleteBtn.isVisible = false
+        }else{
+            checkBtn.isVisible = false
+            nameOrderBtn.isVisible = false
+            seqOrderBtn.isVisible = false
+            deleteBtn.isVisible = true
+        }
     }
 
     override fun setPresenter(presenter: TagContract.Presenter) {

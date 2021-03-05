@@ -67,6 +67,11 @@ class HomeFragment : Fragment(), HomeContract.View {
         return view
     }
 
+    override fun onDestroyView() {
+        mPresenter.detachView()
+        super.onDestroyView()
+  }
+
     private val requestActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->

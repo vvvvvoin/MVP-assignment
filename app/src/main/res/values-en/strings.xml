@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyFriend</string>
+    <string name="please_input_search_data">"Please enter a search term. "</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_edit_tag_max">"Up to five tags can be registered. "</string>
+    <string name="add_edit_tag_dialog_title">Tag</string>
+    <string name="add_edit_tag_dialog_message">"Please enter a tag. "</string>
+    <string name="add_edit_tag_dialog_positive_btn">Confirm</string>
+    <string name="add_edit_tag_dialog_negative_btn">Cancel</string>
+    <string name="add_edit_tag_dialog_error">"Order of registration "</string>
+    <string name="tab_home">home</string>
+    <string name="tab_nation">nation</string>
+    <string name="tab_tag">tag</string>
+    <string name="tab_setting">setting</string>
+    <string name="add_edit_btn">addEditBtn</string>
+    <string name="confirm_btn">confirmBtn</string>
+    <string name="person_add_btn">personAddBtn</string>
+    <string name="delete_tag_btn">deleteTagBtn</string>
+    <string name="uncheck_star">uncheckedStar</string>
+    <string name="check_star">checkedStar</string>
+    <string name="tag_check_btn">tagCheckBtn</string>
+    <string name="nation">Nation</string>
+    <string name="tag">Tag</string>
+    <string name="name">Name</string>
+    <string name="number">Phone number</string>
+    <string name="email">e-mail</string>
+    <string name="search_hint">"Please enter a search term. "</string>
+    <string name="add_edit_tag_necessary_name">"Name entry is required. "</string>
+    <string name="add_edit_tag_necessary_number_or_email">You must enter either your phone number or email.</string>
+    <string name="add_edit_tag_correct_number">Please enter the correct number format.</string>
+    <string name="add_edit_tag_correct_email">"Please enter the correct email format. "</string>
+    <string name="add_edit_tag_necessary_nation">Country selection is mandatory</string>
+    <string name="order_type_name">Order of names</string>
+    <string name="order_type_seq">"Registration "</string>
+</resources>

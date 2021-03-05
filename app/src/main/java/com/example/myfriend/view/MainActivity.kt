@@ -15,11 +15,14 @@ import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.view.nation.NationContract
 import com.example.myfriend.view.nation.NationPresenter
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity()  {
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private var currentNavController: LiveData<NavController>? = null
+
+    private val myRepository: MyRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +39,11 @@ class MainActivity : AppCompatActivity()  {
         findViewById<Toolbar>(R.id.toolbar)
             .setupWithNavController(navController, appBarConfiguration)
 */
+    }
 
-
-
+    override fun onDestroy() {
+        myRepository.clear()
+        super.onDestroy()
     }
 
     private fun setUpBottomNavigationBar(){

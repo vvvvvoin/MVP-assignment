@@ -31,8 +31,8 @@ class NationFragment : Fragment(), NationContract.View {
     }
     private lateinit var binding: FragmentNationBinding
     private val myRepository: MyRepository by inject()
-    //addEdit fragment 에서 넘어왔는지 boolean 으로 구분함
 
+    //addEdit fragment 에서 넘어왔는지 boolean 으로 구분함
     private val nationAdapter: NationAdapter by lazy {
         NationAdapter()
     }
@@ -47,8 +47,6 @@ class NationFragment : Fragment(), NationContract.View {
         arguments?.let {
             isAddOrEdit = it.getBoolean(IS_ADD_OR_EDIT)
         }
-        Log.d(TAG, "addEdit에서 넘어옴 ${isAddOrEdit}")
-        Log.d(TAG, "생성된 mPresenter =  ${mPresenter.toString()}")
 
         mPresenter.setView(this)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nation, container, false)
@@ -64,7 +62,6 @@ class NationFragment : Fragment(), NationContract.View {
         }
 
         nationAdapter.onItemClick { view, nation ->
-            Log.d(TAG, "클릭 리스너가 실행됩니다.")
             if (isAddOrEdit == false) {
                 (mPresenter as NationPresenter).openNationDetail(nation)
             } else {
@@ -118,6 +115,11 @@ class NationFragment : Fragment(), NationContract.View {
 
     override fun setPresenter(presenter: NationContract.Presenter) {
         mPresenter = presenter
+    }
+
+    override fun onDestroyView() {
+        mPresenter.detachView()
+        super.onDestroyView()
     }
 
     override fun showNationDetail(

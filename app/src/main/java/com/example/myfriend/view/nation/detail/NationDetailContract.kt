@@ -11,6 +11,7 @@ interface NationDetailContract {
 
     interface Presenter {
         fun setView(view: View)
+        fun detachView()
         fun setFavorite(nation : Nation, check : Boolean)
     }
 }

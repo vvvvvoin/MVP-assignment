@@ -5,20 +5,23 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.myfriend.data.dataSource.LocalDataSource
 import com.example.myfriend.data.dataSource.RemoteDataSource
+import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
-import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.view.home.ListOrderType
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import java.util.function.Predicate
 import java.util.regex.Pattern
 
 @SuppressLint("CheckResult")
 class MyRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
-) {
+) : BaseRepository(){
     private val TAG = "MyRepository"
-
     //remote
     private val nationListResult = MutableLiveData<ArrayList<NationW>>()
     fun nationListResultObserve() = nationListResult
@@ -105,19 +108,19 @@ class MyRepository(
         }
     }
 
-    fun addFriend(friend : Friend, tagList : List<Tag>?){
+    fun addFriend(friend: Friend, tagList: List<Tag>?){
         localDataSource.addFriend(friend).subscribe({
             Log.d(TAG, "친구 추가 성공 $it")
-            if(tagList != null) insertTag(tagList)
-        },{
+            if (tagList != null) insertTag(tagList)
+        }, {
             Log.d(TAG, "친구 추가 실패 ${it}")
         })
     }
 
-    fun updateFriend(friend : Friend){
+    fun updateFriend(friend: Friend){
         localDataSource.updateFriend(friend).subscribe({
             Log.d(TAG, "친구 업데이트 성공 $it")
-        },{
+        }, {
             Log.d(TAG, "친구 업데이트 실패")
         })
     }
@@ -134,9 +137,9 @@ class MyRepository(
 
     fun getTagList(friendId: String){
         localDataSource.getTagList(friendId).subscribe({
-            detailViewTagListResult.value = it
+            detailViewTagListResult.value = it.distinct()
             Log.d(TAG, "상세 뷰 태그 찾기 성공 $it")
-        },{
+        }, {
             Log.d(TAG, "상세 뷰 태그 실패 성공 $it")
         })
     }
@@ -146,7 +149,7 @@ class MyRepository(
         when (listOrderType) {
             ListOrderType.NAME -> {
                 localDataSource.getTagListWithQuery(wildQuery).subscribe({
-                    tagListWithQueryResult.value = it
+                    tagListWithQueryResult.value = it.distinctBy { it.tagName }
                     Log.d(TAG, "태그 찾기 성공 $it")
                 }, {
                     Log.d(TAG, "태그 찾기 실패 $it")
@@ -154,7 +157,7 @@ class MyRepository(
             }
             ListOrderType.SEQ -> {
                 localDataSource.getTagListWithQuerySeq(wildQuery).subscribe({
-                    tagListWithQueryResult.value = it
+                    tagListWithQueryResult.value =  it.distinctBy { it.tagName }
                     Log.d(TAG, "태그 찾기 성공 $it")
                 }, {
                     Log.d(TAG, "태그 찾기 실패 $it")
@@ -163,19 +166,27 @@ class MyRepository(
         }
     }
 
-    private fun insertTag(tagList : List<Tag>){
+    private fun insertTag(tagList: List<Tag>){
         localDataSource.insertTag(tagList).subscribe({
             Log.d(TAG, "태그 추가 성공 $it")
-        },{
+        }, {
             Log.d(TAG, "태그 추가 실패 ${it}")
         })
     }
 
-    fun deleteTag(friendId : String, tagList : List<Tag>?){
+    fun deleteTagInTagTab(tag: String){
+        localDataSource.deleteTagInTagTab(tag).subscribe({
+            Log.d(TAG, "태그 삭제 성공 $it")
+        }, {
+            Log.d(TAG, "태그 삭제 실패 ${it}")
+        })
+    }
+
+    fun deleteTag(friendId: String, tagList: List<Tag>?){
         localDataSource.deleteTag(friendId).subscribe({
             Log.d(TAG, "태그 삭제 성공 $it")
-            if(tagList != null) insertTag(tagList)
-        },{
+            if (tagList != null) insertTag(tagList)
+        }, {
             Log.d(TAG, "태그 삭제 실패 ${it}")
         })
     }
@@ -197,20 +208,24 @@ class MyRepository(
         })
     }
 
-    fun setFavorite(nation : Nation, check : Boolean){
+    fun setFavorite(nation: Nation, check: Boolean){
         if(check == true){
             localDataSource.setFavorite(nation).subscribe({
                 Log.d(TAG, "국가 즐겨찾기 삽입 성공 $it")
-            },{
+            }, {
                 Log.d(TAG, "국가 즐겨찾기 삽입 실패 $it")
             })
         }else{
             localDataSource.deFavorite(nation).subscribe({
                 Log.d(TAG, "국가 즐겨찾기 삭제 성공 $it")
-            },{
+            }, {
                 Log.d(TAG, "국가 즐겨찾기 삭제 실패 $it")
             })
         }
     }
 
+
+    fun clear(){
+        compositeDisposable.clear()
+    }
 }

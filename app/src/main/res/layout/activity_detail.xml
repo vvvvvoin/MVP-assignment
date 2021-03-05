@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="국가"
+                android:text="@string/nation"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="태그"
+                android:text="@string/tag"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -175,9 +175,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:orientation="horizontal"
-                app:tagItemList="@{presenter.tagList}"
+
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_tag_add_edit" />
         </LinearLayout>
     </LinearLayout>
 </layout>
+

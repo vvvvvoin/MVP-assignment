@@ -19,7 +19,7 @@ fun setHomeItemList(
     item?.let {
         if(searchAdapter.friendList == it) return
         searchAdapter.friendList.clear()
-        searchAdapter.friendList =  it as ArrayList<Friend>
+        searchAdapter.friendList =  ArrayList(it)
         searchAdapter.notifyDataSetChanged()
     }
 }

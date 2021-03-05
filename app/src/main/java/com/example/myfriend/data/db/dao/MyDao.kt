@@ -1,6 +1,5 @@
 package com.example.myfriend.data.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
@@ -65,13 +64,13 @@ interface MyDao {
 
 
     //tag
-    @Query("SELECT * " +
+    @Query("SELECT DISTINCT * " +
             "FROM tag " +
             "WHERE tagName LIKE :query " +
             "ORDER BY tagName")
     fun getTagListWithQuery(query : String) : Single<List<Tag>>
 
-    @Query("SELECT * " +
+    @Query("SELECT DISTINCT * " +
             "FROM tag " +
             "WHERE tagName LIKE :query " +
             "ORDER BY seq")
@@ -85,4 +84,7 @@ interface MyDao {
 
     @Query("DELETE  FROM Tag WHERE friendId = :friendId")
     fun deleteTag(friendId : String): Single<Int>
+
+    @Query("DELETE FROM TAG WHERE tagName = :tagName")
+    fun deleteTagInTagTab(tagName : String) : Single<Int>
 }

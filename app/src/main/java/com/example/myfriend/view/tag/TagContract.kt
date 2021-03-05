@@ -14,8 +14,10 @@ interface TagContract {
 
     interface Presenter {
         fun setView(view: View)
+        fun detachView()
         fun openTagDetail(tagList : List<Tag>)
         fun searchTag(query: String)
+        fun deleteTag(tagList: ArrayList<Tag>)
         fun setOrder(orderType: ListOrderType)
     }
 }

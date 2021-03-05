@@ -12,6 +12,7 @@ import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.view.home.HomeAdapter
 import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
+import com.example.myfriend.view.tag.TagAdapter
 import java.util.*
 
 
@@ -33,3 +34,4 @@ fun setFlagImage(view: ImageView, str: String?) {
         Glide.with(view.context).load(uri).override(Target.SIZE_ORIGINAL).into(view)
     }
 }
+

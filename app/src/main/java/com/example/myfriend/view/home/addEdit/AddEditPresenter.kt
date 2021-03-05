@@ -9,7 +9,7 @@ import com.example.myfriend.data.repository.MyRepository
 class AddEditPresenter(private val myRepository: MyRepository, private val mId : String? = null) : AddEditContract.Presenter {
     private val TAG = "AddEditPresenter"
 
-    private lateinit var view : AddEditContract.View
+    private var view : AddEditContract.View? = null
 
     init {
 
@@ -17,7 +17,11 @@ class AddEditPresenter(private val myRepository: MyRepository, private val mId :
 
     override fun setView(view: AddEditContract.View) {
         this.view = view
-        this.view.setPresenter(this)
+        this.view!!.setPresenter(this)
+    }
+
+    override fun detachView() {
+        view = null
     }
 
     override fun addEdit(name: String, number: String?, email: String?, flag: String, nation : String, profile : String?, tagList : ArrayList<Tag>) {
@@ -31,7 +35,7 @@ class AddEditPresenter(private val myRepository: MyRepository, private val mId :
             if(tagList.isNotEmpty()) tagList.forEach { it.friendId = mId }
             myRepository.deleteTag(mId, tagList)
         }
-        view.completeAddEdit()
+        view?.completeAddEdit()
     }
 
 

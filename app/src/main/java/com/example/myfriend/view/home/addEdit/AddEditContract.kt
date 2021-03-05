@@ -13,6 +13,7 @@ interface AddEditContract {
 
     interface Presenter {
         fun setView(view: View)
+        fun detachView()
         fun addEdit(name: String, number: String?, email: String?, flag: String, nation : String, profile : String?, tagList : ArrayList<Tag>)
     }
 }

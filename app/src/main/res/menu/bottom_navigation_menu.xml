@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navigation_home"
-        android:title="Home"
+        android:title="@string/tab_home"
         android:icon="@drawable/ic_baseline_people_24"/>
     <item
         android:id="@+id/navigation_nation"
-        android:title="Nation"
+        android:title="@string/tab_nation"
         android:icon="@drawable/ic_baseline_emoji_flags_24"/>
     <item
         android:id="@+id/navigation_tag"
-        android:title="Tag"
+        android:title="@string/tab_tag"
         android:icon="@drawable/ic_baseline_local_offer_24"/>
     <item
         android:id="@+id/navigation_setting"
-        android:title="Setting"
+        android:title="@string/tab_setting"
         android:icon="@drawable/ic_baseline_settings_24"/>
 </menu>
