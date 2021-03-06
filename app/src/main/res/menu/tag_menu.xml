@@ -22,4 +22,5 @@
         android:id="@+id/order_seq_tag"
         android:title="@string/order_type_seq"
         app:showAsAction="never" />
+
 </menu>

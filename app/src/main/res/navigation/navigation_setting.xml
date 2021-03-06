@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/settingFragment2"
         android:name="com.example.myfriend.view.setting.SettingFragment"
-        android:label="fragment_setting"
+        android:label=""
         tools:layout="@layout/fragment_setting" />
 </navigation>

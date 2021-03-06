@@ -43,12 +43,13 @@ class NationFragment : Fragment(), NationContract.View {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mPresenter = NationPresenter(myRepository, isAddOrEdit)
         arguments?.let {
             isAddOrEdit = it.getBoolean(IS_ADD_OR_EDIT)
         }
 
+        mPresenter = NationPresenter(myRepository, isAddOrEdit)
         mPresenter.setView(this)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nation, container, false)
         binding.apply {
             presenter = (mPresenter as NationPresenter)
@@ -73,7 +74,7 @@ class NationFragment : Fragment(), NationContract.View {
             }
         }
 
-        view.findViewById<EditText>(R.id.search_edit_text).textChanges()
+        binding.searchEditText.textChanges()
             .subscribeOn(Schedulers.io())
             .filter{ it.toString().length > 1 }
             .debounce(200, TimeUnit.MILLISECONDS)
@@ -99,7 +100,6 @@ class NationFragment : Fragment(), NationContract.View {
 
     private fun initObserver() {
         (mPresenter as NationPresenter).nationFavorite.observe(viewLifecycleOwner, {
-            //옵저버 패턴으로 의도치않게 실행되는 detailActivity 맊기
             if (it.nation == "*" || it.alpha2Code.isEmpty()) {
                 return@observe
             }else{

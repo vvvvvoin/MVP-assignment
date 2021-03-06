@@ -57,6 +57,7 @@ class LocalDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    //tag
     fun getTagList(friendId: String): Single<List<Tag>> {
         return myDao.getTagList(friendId)
             .subscribeOn(Schedulers.io())
@@ -93,6 +94,13 @@ class LocalDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getFriendListWithTagName(tagName: String): Single<List<Friend>> {
+        return myDao.getFriendListWithTagName(tagName)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    //nation favorite
     fun getFavorite(nation : String): Single<List<Nation>> {
         return myDao.getFavorite(nation)
             .subscribeOn(Schedulers.io())

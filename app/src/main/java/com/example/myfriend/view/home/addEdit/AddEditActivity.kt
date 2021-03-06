@@ -22,6 +22,11 @@ class AddEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_edit)
+        setSupportActionBar(binding.addEditToolbar)
+        supportActionBar?.title = ""
+
+
+
         setSupportActionBar(findViewById(R.id.add_edit_toolbar))
         val friendData = intent.getParcelableExtra<Friend>(DetailActivity.EXTRA_FRIEND_DATA)
         val tagList = intent.getParcelableArrayListExtra<Tag>(DetailActivity.EXTRA_TAG_DATA)

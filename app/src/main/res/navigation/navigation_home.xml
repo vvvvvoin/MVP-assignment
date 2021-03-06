@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment2"
         android:name="com.example.myfriend.view.home.HomeFragment"
-        android:label="fragment_home"
+        android:label=""
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment2_to_addEditFragment"

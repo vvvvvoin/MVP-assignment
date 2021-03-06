@@ -21,6 +21,7 @@ import com.example.myfriend.view.home.HomePresenter
 import com.example.myfriend.view.home.addEdit.AddEditActivity
 import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
 import com.example.myfriend.view.nation.detail.NationDetailActivity
+import com.example.myfriend.view.tag.detail.TagDetailActivity
 import okhttp3.internal.toImmutableList
 import org.koin.android.ext.android.inject
 
@@ -53,6 +54,8 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
             presenter = mPresenter as DetailPresenter
             data = friendData
         }
+        setSupportActionBar(binding.detailHomeToolbar)
+        supportActionBar?.title = friendData.name
 
         binding.tagItemRecycler.apply {
             adapter = tagAdapter
@@ -71,6 +74,12 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
                 tagAdapter.notifyDataSetChanged()
             }
         })
+
+        tagAdapter.onTagItemClick { view, tag ->
+            val intent = Intent(this, TagDetailActivity::class.java)
+            intent.putExtra(TagDetailActivity.EXTRA_TAG_NAME, tag.tagName)
+            startActivity(intent)
+        }
 
         setSupportActionBar(findViewById(R.id.detail_home_toolbar))
     }

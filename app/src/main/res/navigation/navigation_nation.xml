@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nationFragment2"
         android:name="com.example.myfriend.view.nation.NationFragment"
-        android:label="fragment_nation"
+        android:label=""
         tools:layout="@layout/fragment_nation" >
         <argument
             android:name="isAddOrEdit"

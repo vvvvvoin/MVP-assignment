@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
-import com.example.myfriend.databinding.ItemFirendBinding
 import com.example.myfriend.databinding.ItemTagAddEditBinding
 import com.example.myfriend.view.home.HomeAdapter
 
@@ -28,6 +27,9 @@ class AddEditTagAdapter(private val isAddEdit : Boolean) : RecyclerView.Adapter<
             }
         }else{
             holder.clearTagView()
+            holder.itemLayout.setOnClickListener {
+                tagItemClickListener?.onClickListener(it, tagList[position])
+            }
         }
         holder.bind(tagList[position])
     }
@@ -38,6 +40,7 @@ class AddEditTagAdapter(private val isAddEdit : Boolean) : RecyclerView.Adapter<
 
     inner class ItemHolder(private val binding: ItemTagAddEditBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        var itemLayout = binding.itemLayout
         var tagClear = binding.tagClear
         var tagImage = binding.tagImage
 
@@ -54,4 +57,17 @@ class AddEditTagAdapter(private val isAddEdit : Boolean) : RecyclerView.Adapter<
         }
     }
 
+    var tagItemClickListener: TagItemClickListener? = null
+
+    interface TagItemClickListener {
+        fun onClickListener(view: View, tag: Tag)
+    }
+
+    fun onTagItemClick(listener: (view: View, tag: Tag) -> Unit) {
+        tagItemClickListener = object : TagItemClickListener {
+            override fun onClickListener(view: View, tag: Tag) {
+                listener(view, tag)
+            }
+        }
+    }
 }

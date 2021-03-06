@@ -87,4 +87,12 @@ interface MyDao {
 
     @Query("DELETE FROM TAG WHERE tagName = :tagName")
     fun deleteTagInTagTab(tagName : String) : Single<Int>
+
+    @Query("SELECT * " +
+            "FROM FRIEND " +
+            "WHERE id in(" +
+                "SELECT friendId " +
+                "FROM Tag " +
+                "WHERE tagName = :tagName)")
+    fun getFriendListWithTagName(tagName : String) : Single<List<Friend>>
 }

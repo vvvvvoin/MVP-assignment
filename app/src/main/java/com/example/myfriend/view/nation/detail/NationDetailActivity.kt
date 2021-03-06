@@ -41,7 +41,8 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
         mPresenter.setView(this)
 
         binding  = DataBindingUtil.setContentView(this, R.layout.activity_nation_detail)
-        setSupportActionBar(findViewById(R.id.detail_toolbar))
+        setSupportActionBar(binding.detailToolbar)
+        supportActionBar?.title = ""
 
         nationData = intent.getParcelableExtra(EXTRA_NATION_DATA)!!
         isCheck = intent.getBooleanExtra(EXTRA_IS_CHECKED, false)

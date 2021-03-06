@@ -32,7 +32,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="5dp"
             android:text="@{tag.tagName}"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
 
         <ImageView
             android:id="@+id/tag_clear"

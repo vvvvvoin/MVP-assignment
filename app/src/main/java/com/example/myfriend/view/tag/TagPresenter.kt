@@ -13,9 +13,8 @@ class TagPresenter(private val myRepository: MyRepository) : TagContract.Present
     private val TAG = "NationPresenter"
 
     private var view: TagContract.View? = null
-    private val resultTagList = myRepository.tagListWithQueryObserve()
 
-    //private val _searchTag = MediatorLiveData<List<Tag>>()
+    private val resultTagList = myRepository.tagListWithQueryObserve()
     val searchTag: LiveData<List<Tag>>
         get() = resultTagList
 
@@ -33,7 +32,6 @@ class TagPresenter(private val myRepository: MyRepository) : TagContract.Present
 
     override fun detachView() {
         view = null
-        //_searchTag.removeSource(resultTagList)
     }
 
     override fun openTagDetail(tagList: List<Tag>) {
@@ -55,7 +53,8 @@ class TagPresenter(private val myRepository: MyRepository) : TagContract.Present
 
     override fun setOrder(orderType: ListOrderType) {
         listOrderType = orderType
-        myRepository.searchTagListWithQuery(query, listOrderType)
+        if(!query.isEmpty())
+            myRepository.searchTagListWithQuery(query, listOrderType)
     }
 
 

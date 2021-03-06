@@ -1,60 +1,106 @@
 package com.example.myfriend.view.setting
 
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.example.myfriend.R
+import com.example.myfriend.databinding.FragmentSettingBinding
+import com.example.myfriend.view.MainActivity
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val TAG = "SettingFragment"
+    private lateinit var binding : FragmentSettingBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
+        val view = binding.root
+        val locale = getSystemLocale(requireContext().resources.configuration)
+        var appLang = ""
+        Log.d(TAG, locale?.displayLanguage.toString())
+        if (locale?.displayLanguage == "영어" || locale?.displayLanguage == "English") {
+            appLang = getString(R.string.english)
+            binding.koreanRadio.isChecked = false
+            binding.englishRadio.isChecked = true
+        } else {
+            appLang = getString(R.string.korean)
+            binding.koreanRadio.isChecked = true
+            binding.englishRadio.isChecked = false
+        }
+
+        binding.koreanRadio.setOnClickListener {
+            binding.englishRadio.isChecked = false
+            if(appLang != getString(R.string.korean))
+                changeLanguage(it)
+        }
+
+        binding.englishRadio.setOnClickListener {
+            binding.koreanRadio.isChecked = false
+            if(appLang != getString(R.string.english))
+                changeLanguage(it)
+        }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    fun getSystemLocaleLegacy(config: Configuration): Locale? {
+        return config.locale
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    fun getSystemLocale(config: Configuration): Locale? {
+        return config.getLocales().get(0)
+    }
+
+    fun setSystemLocaleLegacy(config: Configuration, locale: Locale) {
+        config.locale = locale
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    fun setSystemLocale(config: Configuration, locale: Locale?) {
+        config.setLocale(locale)
+    }
+
+    private fun changeLanguage(view: View) {
+        val lang = view.tag as String
+        LocaleWrapper.setLocale(lang)
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+}
+
+object LocaleWrapper {
+    private var sLocale: Locale? = null
+
+    fun wrap(base: Context): Context {
+        if (sLocale == null) {
+            return base
+        }
+        val res: Resources = base.getResources()
+        val config = res.getConfiguration()
+        config.setLocale(sLocale)
+        return base.createConfigurationContext(config)
+    }
+
+    fun setLocale(lang: String?) {
+        sLocale = Locale(lang)
     }
 }

@@ -63,6 +63,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:maxLines="1"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/number_edit"
                 app:layout_constraintHorizontal_bias="0.526"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -79,6 +80,7 @@
                 android:textSize="20sp"
                 android:visibility='@{data.number.equals("") ? View.GONE : View.VISIBLE}'
                 android:maxLines="1"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/email_edit"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -109,6 +111,7 @@
                 android:textSize="20sp"
                 android:visibility='@{data.email.equals("") ? View.GONE : View.VISIBLE}'
                 android:maxLines="1"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -144,7 +147,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:text="@string/nation"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:id="@+id/flag_image_view"
@@ -167,15 +171,15 @@
                 android:layout_marginHorizontal="10dp"
                 android:text="@string/tag"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tag_item_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
-
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_tag_add_edit" />
         </LinearLayout>

@@ -8,7 +8,7 @@
     <string name="add_edit_tag_dialog_message">"Please enter a tag. "</string>
     <string name="add_edit_tag_dialog_positive_btn">Confirm</string>
     <string name="add_edit_tag_dialog_negative_btn">Cancel</string>
-    <string name="add_edit_tag_dialog_error">"Order of registration "</string>
+    <string name="add_edit_tag_dialog_error">Only English uppercase letters, numbers, and underbars are allowed.</string>
     <string name="tab_home">home</string>
     <string name="tab_nation">nation</string>
     <string name="tab_tag">tag</string>
@@ -32,5 +32,7 @@
     <string name="add_edit_tag_correct_email">"Please enter the correct email format. "</string>
     <string name="add_edit_tag_necessary_nation">Country selection is mandatory</string>
     <string name="order_type_name">Order of names</string>
-    <string name="order_type_seq">"Registration "</string>
+    <string name="order_type_seq">"Order of registration "</string>
+    <string name="english">English</string>
+    <string name="korean">Korean</string>
 </resources>

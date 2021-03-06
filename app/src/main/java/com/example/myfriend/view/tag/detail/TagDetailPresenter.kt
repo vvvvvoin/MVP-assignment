@@ -1,5 +1,6 @@
 package com.example.myfriend.view.tag.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.example.myfriend.data.db.entity.Friend
@@ -11,16 +12,17 @@ class TagDetailPresenter(private val myRepository: MyRepository, private val tag
 
     private var view : TagDetailContract.View? = null
 
-
+    private val resultFriendList = myRepository.friendListWithTagNameObserve()
 
     private val _friendList = MediatorLiveData<List<Friend>>()
     val friendList: LiveData<List<Friend>>
         get() = _friendList
 
     init {
-        //이걸로 쿼리문 만들고 찾기
-        tagName
-
+        myRepository.getFriendListWithTagName(tagName)
+        _friendList.addSource(resultFriendList){
+            _friendList.value = it
+        }
     }
 
     override fun setView(view: TagDetailContract.View) {
@@ -30,7 +32,7 @@ class TagDetailPresenter(private val myRepository: MyRepository, private val tag
 
     override fun detachView() {
         view = null
-        //_friendList.removeSource(resultTagList)
+        _friendList.removeSource(resultFriendList)
     }
 
     fun openNumberApp(number : String?){

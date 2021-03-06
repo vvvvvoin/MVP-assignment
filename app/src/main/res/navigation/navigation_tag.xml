@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/tagFragment2"
         android:name="com.example.myfriend.view.tag.TagFragment"
-        android:label="fragment_tag"
+        android:label=""
         tools:layout="@layout/fragment_tag" />
 </navigation>

@@ -1,21 +1,18 @@
 package com.example.myfriend.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.view.nation.NationContract
-import com.example.myfriend.view.nation.NationPresenter
+import com.example.myfriend.view.setting.LocaleWrapper.wrap
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.ext.android.inject
+
 
 class MainActivity : AppCompatActivity()  {
 
@@ -23,6 +20,10 @@ class MainActivity : AppCompatActivity()  {
     private var currentNavController: LiveData<NavController>? = null
 
     private val myRepository: MyRepository by inject()
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity()  {
             navGraphIds, supportFragmentManager, R.id.nav_host_container, intent
         )
 
-        controller.observe(this, Observer {navController->
+        controller.observe(this, Observer { navController ->
             setupActionBarWithNavController(navController)
         })
         currentNavController = controller

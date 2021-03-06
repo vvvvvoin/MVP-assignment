@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.data.db.entity.Friend
-import com.example.myfriend.databinding.ItemFirendBinding
+import com.example.myfriend.databinding.ItemFriendBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -15,7 +15,7 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
     var friendList = ArrayList<Friend>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ItemHolder(ItemFirendBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
+        ItemHolder(ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
             presenter = mPresenter
         })
 
@@ -33,7 +33,7 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
         return friendList.size
     }
 
-    inner class ItemHolder(private val binding: ItemFirendBinding) :
+    inner class ItemHolder(private val binding: ItemFriendBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var layout = binding.layout
 

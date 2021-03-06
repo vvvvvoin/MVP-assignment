@@ -45,8 +45,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="@{item.nation}"
+            android:text='@{item.nation.contains("*") ? item.nation.substring(0, item.nation.length()-1) : item.nation}'
             android:textSize="22sp"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
 

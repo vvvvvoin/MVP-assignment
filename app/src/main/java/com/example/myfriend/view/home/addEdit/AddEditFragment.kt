@@ -101,11 +101,11 @@ class AddEditFragment : Fragment(), AddEditContract.View {
 
         binding.flagImageView.setOnClickListener {
             val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            val a = NationFragment()
+            val fragment = NationFragment()
             val bundle = Bundle()
             bundle.putBoolean(NationFragment.IS_ADD_OR_EDIT, true)
-            a.arguments = bundle
-            transaction.add(R.id.contentFrame, a)
+            fragment.arguments = bundle
+            transaction.add(R.id.contentFrame, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }

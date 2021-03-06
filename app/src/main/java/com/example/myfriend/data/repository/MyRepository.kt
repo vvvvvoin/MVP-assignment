@@ -135,6 +135,9 @@ class MyRepository(
     private val tagListWithQueryResult = MutableLiveData<List<Tag>>()
     fun tagListWithQueryObserve() = tagListWithQueryResult
 
+    private val friendListWithTagName = MutableLiveData<List<Friend>>()
+    fun friendListWithTagNameObserve() = friendListWithTagName
+
     fun getTagList(friendId: String){
         localDataSource.getTagList(friendId).subscribe({
             detailViewTagListResult.value = it.distinct()
@@ -188,6 +191,15 @@ class MyRepository(
             if (tagList != null) insertTag(tagList)
         }, {
             Log.d(TAG, "태그 삭제 실패 ${it}")
+        })
+    }
+
+    fun getFriendListWithTagName(tagName : String){
+        localDataSource.getFriendListWithTagName(tagName).subscribe({
+            friendListWithTagName.value = it
+            Log.d(TAG, "태그이름으로 친구 불러오기 성공")
+        },{
+            Log.d(TAG, "태그이름으로 친구 불러오기 실패 ${it}")
         })
     }
 
