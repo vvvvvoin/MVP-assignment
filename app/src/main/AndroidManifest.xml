@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFriend">
-        <activity android:name=".view.tag.detail.TagDetailActivity"></activity>
+        <activity android:name=".view.tag.detail.TagDetailActivity" />
         <activity
             android:name=".view.home.addEdit.AddEditActivity"
             android:windowSoftInputMode="adjustPan" />

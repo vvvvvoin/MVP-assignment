@@ -1,7 +1,5 @@
 package com.example.myfriend.view.nation.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.repository.MyRepository
 

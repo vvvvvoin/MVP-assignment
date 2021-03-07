@@ -41,5 +41,4 @@ class AddEditActivity : AppCompatActivity() {
         transaction.commit()
 
     }
-
 }

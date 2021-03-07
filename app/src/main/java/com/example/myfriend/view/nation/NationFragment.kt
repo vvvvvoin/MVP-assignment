@@ -2,16 +2,11 @@ package com.example.myfriend.view.nation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.navArgs
 import com.example.myfriend.R
-import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentNationBinding
 import com.example.myfriend.view.home.addEdit.AddEditFragment
@@ -70,18 +65,25 @@ class NationFragment : Fragment(), NationContract.View {
                 val bundle = Bundle()
                 bundle.putParcelable(AddEditFragment.ADD_OR_EDIT_BUNDLE_KEY, nation)
                 setFragmentResult(AddEditFragment.ADD_OR_EDIT_REQUEST_KEY, bundle)
+                mPresenter.initNationList()
                 activity?.onBackPressed()
             }
         }
 
         binding.searchEditText.textChanges()
             .subscribeOn(Schedulers.io())
-            .filter{ it.toString().length > 1 }
             .debounce(200, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                if(!isAddOrEdit) nationQuery = it.toString()
-                mPresenter.searchNation(it.toString())
+                if(it.isNullOrEmpty()){
+                    binding.plzSearchTextView.visibility = View.VISIBLE
+                    binding.nationRecycler.visibility = View.INVISIBLE
+                }else{
+                    binding.plzSearchTextView.visibility = View.GONE
+                    binding.nationRecycler.visibility = View.VISIBLE
+                    if(!isAddOrEdit) nationQuery = it.toString()
+                    mPresenter.searchNation(it.toString())
+                }
             }
 
         initView()
@@ -120,17 +122,6 @@ class NationFragment : Fragment(), NationContract.View {
     override fun onDestroyView() {
         mPresenter.detachView()
         super.onDestroyView()
-    }
-
-    override fun showNationDetail(
-        data: Nation,
-        check: Boolean
-    ) {
-
-    }
-
-    override fun errorMessage(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 
 }

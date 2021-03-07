@@ -3,9 +3,9 @@ package com.example.myfriend.view.nation.detail
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -14,6 +14,7 @@ import com.example.myfriend.R
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.ActivityNationDetailBinding
+import com.example.myfriend.util.EventObserver
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -54,6 +55,13 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
         Glide.with(this).load(uri).override(Target.SIZE_ORIGINAL).into(binding.nationImage)
 
         invalidateOptionsMenu()
+        initErrorObserver()
+    }
+
+    private fun initErrorObserver() {
+        myRepository.error.observe(this, EventObserver{
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -102,7 +110,4 @@ class NationDetailActivity : AppCompatActivity(), NationDetailContract.View {
         mPresenter = presenter
     }
 
-    override fun errorMessage(error: String) {
-
-    }
 }

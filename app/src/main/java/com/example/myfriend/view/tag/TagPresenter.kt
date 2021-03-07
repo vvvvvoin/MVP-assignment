@@ -1,11 +1,7 @@
 package com.example.myfriend.view.tag
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.data.dataSource.remoteData.NationW
-import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.view.home.ListOrderType
 
@@ -53,7 +49,7 @@ class TagPresenter(private val myRepository: MyRepository) : TagContract.Present
 
     override fun setOrder(orderType: ListOrderType) {
         listOrderType = orderType
-        if(!query.isEmpty())
+        if(query.isNotEmpty())
             myRepository.searchTagListWithQuery(query, listOrderType)
     }
 

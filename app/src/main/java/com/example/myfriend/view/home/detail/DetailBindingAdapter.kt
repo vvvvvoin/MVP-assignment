@@ -1,18 +1,11 @@
 package com.example.myfriend.view.home.detail
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.example.myfriend.R
-import com.example.myfriend.data.db.entity.Friend
-import com.example.myfriend.data.db.entity.Tag
-import com.example.myfriend.view.home.HomeAdapter
-import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
-import com.example.myfriend.view.tag.TagAdapter
 import java.util.*
 
 

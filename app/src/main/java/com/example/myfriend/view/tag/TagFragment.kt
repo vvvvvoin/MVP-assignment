@@ -2,21 +2,13 @@ package com.example.myfriend.view.tag
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.myfriend.R
-import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.repository.MyRepository
-import com.example.myfriend.databinding.FragmentNationBinding
 import com.example.myfriend.databinding.FragmentTagBinding
 import com.example.myfriend.view.home.ListOrderType
-import com.example.myfriend.view.home.detail.DetailActivity
-import com.example.myfriend.view.nation.NationContract
-import com.example.myfriend.view.nation.NationFragment
-import com.example.myfriend.view.nation.NationPresenter
 import com.example.myfriend.view.tag.detail.TagDetailActivity
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -63,8 +55,12 @@ class TagFragment : Fragment(), TagContract.View{
                 if(it.isNullOrEmpty()){
                     //공백으로 만들기
                     mPresenter.searchTag("")
+                    binding.plzSearchTextView.visibility = View.VISIBLE
+                    binding.tagRecycler.visibility = View.INVISIBLE
                 }else{
                     mPresenter.searchTag(it.toString())
+                    binding.plzSearchTextView.visibility = View.GONE
+                    binding.tagRecycler.visibility = View.VISIBLE
                 }
             }
 
@@ -82,6 +78,7 @@ class TagFragment : Fragment(), TagContract.View{
         }
 
 
+        setDeleteMode(deleteMode)
         setHasOptionsMenu(true)
         activity?.invalidateOptionsMenu()
         return view
@@ -91,6 +88,10 @@ class TagFragment : Fragment(), TagContract.View{
         if(!boolean) binding.searchEditText.text.clear()
         deleteMode = boolean
         tagAdapter.setDeleteMode(boolean)
+    }
+
+    override fun setPresenter(presenter: TagContract.Presenter) {
+        mPresenter = presenter
     }
 
     override fun onDestroyView() {
@@ -148,15 +149,5 @@ class TagFragment : Fragment(), TagContract.View{
         }
     }
 
-    override fun setPresenter(presenter: TagContract.Presenter) {
 
-    }
-
-    override fun showTagDetail() {
-
-    }
-
-    override fun errorMessage(error: String) {
-
-    }
 }

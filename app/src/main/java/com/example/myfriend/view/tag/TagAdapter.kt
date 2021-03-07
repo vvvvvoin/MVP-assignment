@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.TranslateAnimation
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.databinding.ItemTagTabBinding
 

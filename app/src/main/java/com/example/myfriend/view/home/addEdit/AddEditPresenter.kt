@@ -1,7 +1,5 @@
 package com.example.myfriend.view.home.addEdit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.data.repository.MyRepository

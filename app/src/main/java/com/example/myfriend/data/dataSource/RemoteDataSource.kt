@@ -25,5 +25,4 @@ class RemoteDataSource(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-
 }

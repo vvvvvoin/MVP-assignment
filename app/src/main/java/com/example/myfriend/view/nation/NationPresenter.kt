@@ -29,6 +29,8 @@ class NationPresenter(
     private var clickedAlpha2Code : String = ""
 
     init {
+        myRepository.initNationListResult()
+
         _searchNation.addSource(resultNationList) {
             if(isAddEdit){
                 myRepository.initNationListResult()
@@ -36,6 +38,7 @@ class NationPresenter(
             }
             _searchNation.value = it
         }
+
         _nationFavorite.addSource(resultNationFavorite){
             Log.d(TAG, it.toString())
             if(isAddEdit == false) {
@@ -65,6 +68,10 @@ class NationPresenter(
 
     override fun searchNation(query: String) {
         myRepository.searchNation(query)
+    }
+
+    override fun initNationList() {
+        myRepository.initNationListResult()
     }
 
 }

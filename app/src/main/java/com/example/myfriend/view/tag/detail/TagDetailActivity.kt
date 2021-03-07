@@ -4,15 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.ActivityTagDetailBinding
-import com.example.myfriend.databinding.FragmentHomeBinding
-import com.example.myfriend.view.home.HomeAdapter
-import com.example.myfriend.view.home.HomeContract
-import com.example.myfriend.view.home.detail.DetailActivity
+import com.example.myfriend.util.EventObserver
 import org.koin.android.ext.android.inject
 
 class TagDetailActivity : AppCompatActivity(), TagDetailContract.View {
@@ -49,14 +46,17 @@ class TagDetailActivity : AppCompatActivity(), TagDetailContract.View {
             setHasFixedSize(true)
         }
 
+        initErrorObserver()
+    }
+
+    private fun initErrorObserver() {
+        myRepository.error.observe(this, EventObserver{
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun setPresenter(presenter: TagDetailContract.Presenter) {
         mPresenter = presenter
-    }
-
-    override fun errorMessage(error: String) {
-
     }
 
     override fun openNumberApp(number: String) {

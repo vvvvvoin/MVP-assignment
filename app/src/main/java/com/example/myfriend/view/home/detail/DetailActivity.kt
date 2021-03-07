@@ -1,14 +1,13 @@
 package com.example.myfriend.view.home.detail
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import com.example.myfriend.R
@@ -16,13 +15,10 @@ import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.ActivityDetailBinding
-import com.example.myfriend.view.home.HomeAdapter
-import com.example.myfriend.view.home.HomePresenter
+import com.example.myfriend.util.EventObserver
 import com.example.myfriend.view.home.addEdit.AddEditActivity
 import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
-import com.example.myfriend.view.nation.detail.NationDetailActivity
 import com.example.myfriend.view.tag.detail.TagDetailActivity
-import okhttp3.internal.toImmutableList
 import org.koin.android.ext.android.inject
 
 class DetailActivity : AppCompatActivity(), DetailContract.View {
@@ -82,6 +78,13 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
         }
 
         setSupportActionBar(findViewById(R.id.detail_home_toolbar))
+        initObserver()
+    }
+
+    private fun initObserver() {
+        myRepository.error.observe(this, EventObserver{
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onDestroy() {
@@ -118,10 +121,6 @@ class DetailActivity : AppCompatActivity(), DetailContract.View {
 
     override fun setPresenter(presenter: DetailContract.Presenter) {
         mPresenter = presenter
-    }
-
-    override fun errorMessage(error: String) {
-
     }
 
     override fun openNumberApp(number: String) {

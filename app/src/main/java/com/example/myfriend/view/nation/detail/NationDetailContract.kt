@@ -6,7 +6,6 @@ import com.example.myfriend.data.db.entity.Nation
 interface NationDetailContract {
     interface View {
         fun setPresenter(presenter: Presenter)
-        fun errorMessage(error : String)
     }
 
     interface Presenter {

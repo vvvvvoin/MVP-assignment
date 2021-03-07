@@ -4,8 +4,6 @@ import com.example.myfriend.data.db.MyDataBase
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.db.entity.Tag
-import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,11 +13,6 @@ class LocalDataSource(
     private val myDataBase: MyDataBase
 ) {
     private val myDao = myDataBase.myDataBaseDao()
-    //private val list = myDao.getFriendList()
-
-//    fun getFriendList(): List<Friend> {
-//        return list
-//    }
 
     fun getFriendList() : Single<List<Friend>> {
         return myDao.getFriendList()

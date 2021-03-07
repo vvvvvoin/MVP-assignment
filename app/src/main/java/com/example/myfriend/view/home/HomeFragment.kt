@@ -3,7 +3,6 @@ package com.example.myfriend.view.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -103,10 +102,6 @@ class HomeFragment : Fragment(), HomeContract.View {
 
     override fun setPresenter(presenter: HomeContract.Presenter) {
         mPresenter = presenter
-    }
-
-    override fun errorMessage(error: String) {
-
     }
 
     override fun openNumberApp(number: String) {

@@ -23,6 +23,7 @@ import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.data.repository.MyRepository
 import com.example.myfriend.databinding.FragmentAddEditBinding
+import com.example.myfriend.util.EventObserver
 import com.example.myfriend.view.nation.NationFragment
 import org.koin.android.ext.android.inject
 import java.util.*
@@ -119,7 +120,14 @@ class AddEditFragment : Fragment(), AddEditContract.View {
 
         setProfileImage(receivedProfileUri, binding.profileImageView)
         setHasOptionsMenu(true)
+        initErrorObserver()
         return view
+    }
+
+    private fun initErrorObserver() {
+        myRepository.error.observe(viewLifecycleOwner, EventObserver{
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     private val requestActivity = registerForActivityResult(
@@ -144,7 +152,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
             .setMessage(getString(R.string.add_edit_tag_dialog_message))
             .setPositiveButton(getString(R.string.add_edit_tag_dialog_positive_btn)) { dialogInterface, i ->
                 if (!Pattern.matches(TAG_REGEX, editText.text.toString())) {
-                    errorMessage(getString(R.string.add_edit_tag_dialog_error))   //수정해야함~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~안나옴
+                    showMessage(getString(R.string.add_edit_tag_dialog_error))
                     return@setPositiveButton
                 }
                 addEditTagAdapter.tagList.add(Tag(editText.text.toString()))
@@ -215,10 +223,6 @@ class AddEditFragment : Fragment(), AddEditContract.View {
 
     override fun setPresenter(presenter: AddEditContract.Presenter) {
         mPresenter = presenter
-    }
-
-    override fun errorMessage(error: String) {
-
     }
 
     override fun completeAddEdit() {

@@ -9,11 +9,8 @@ import com.example.myfriend.data.dataSource.remoteData.NationW
 import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Nation
 import com.example.myfriend.data.db.entity.Tag
+import com.example.myfriend.util.Event
 import com.example.myfriend.view.home.ListOrderType
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import java.util.function.Predicate
 import java.util.regex.Pattern
 
 @SuppressLint("CheckResult")
@@ -28,7 +25,6 @@ class MyRepository(
 
     private var lastSearchQuery : String = ""
 
-    //잘 동작하는데 맞는 방법일까?
     fun initNationListResult() {
         nationListResult.value?.clear()
     }
@@ -41,21 +37,24 @@ class MyRepository(
                     Log.d(TAG, "숫자로 검색함")
                     nationListResult.value = it
                 }, {
-                    Log.d(TAG, "숫자로 실패 ${it.toString()}")
+                    _error.value = Event("숫자패턴 국가 검색 실패")
+                    Log.d(TAG, "숫자로 실패 $it")
                 })
             } else if (Pattern.matches("^[a-zA-Z]{2,3}$", query)) {
                 remoteDataSource.searchCode(query).subscribe({
                     Log.d(TAG, "2,3문자로 검색함")
                     nationListResult.value = arrayListOf(it)
                 }, {
-                    Log.d(TAG, "2,3문자로 검색함 ${it.toString()}")
+                    _error.value = Event( "국가 코드 검색 실패")
+                    Log.d(TAG, "2,3문자로 검색함 $it")
                 })
             } else if (Pattern.matches("^[a-zA-Z]+$", query)) {
                 remoteDataSource.searchName(query).subscribe({
                     Log.d(TAG, "쌩으로 검색함")
                     nationListResult.value = it
                 }, {
-                    Log.d(TAG, "쌩으로 검색 실패 이유는 ${it.toString()}")
+                    _error.value = Event( "국가 검색 실패")
+                    Log.d(TAG, "쌩으로 검색 실패 이유는 $it")
                 })
             }
         } else {
@@ -75,6 +74,7 @@ class MyRepository(
                 localDataSource.getFriendList().subscribe({
                     friendListResult.value = it
                 }, {
+                    _error.value = Event( "친구 이름순 검색 실패")
                     Log.d(TAG, "친구 찾기 실패 $it")
                 })
             }
@@ -82,6 +82,7 @@ class MyRepository(
                 localDataSource.getFriendListSeq().subscribe({
                     friendListResult.value = it
                 }, {
+                    _error.value = Event( "친구 등록순 검색 실패")
                     Log.d(TAG, "친구 찾기 실패 $it")
                 })
             }
@@ -95,6 +96,7 @@ class MyRepository(
                 localDataSource.getFriendListWithQuery(wildQuery).subscribe({
                     friendListResult.value = it
                 }, {
+                    _error.value = Event( "친구 이름순 검색어로 검색 실패")
                     Log.d(TAG, "친구 찾기 실패 $it")
                 })
             }
@@ -102,6 +104,7 @@ class MyRepository(
                 localDataSource.getFriendListWithQuerySeq(wildQuery).subscribe({
                     friendListResult.value = it
                 }, {
+                    _error.value = Event( "친구 등록순 검색어로 검색 실패")
                     Log.d(TAG, "친구 찾기 실패 $it")
                 })
             }
@@ -113,7 +116,8 @@ class MyRepository(
             Log.d(TAG, "친구 추가 성공 $it")
             if (tagList != null) insertTag(tagList)
         }, {
-            Log.d(TAG, "친구 추가 실패 ${it}")
+            _error.value = Event( "친구 등록 실패")
+            Log.d(TAG, "친구 추가 실패 $it")
         })
     }
 
@@ -121,6 +125,7 @@ class MyRepository(
         localDataSource.updateFriend(friend).subscribe({
             Log.d(TAG, "친구 업데이트 성공 $it")
         }, {
+            _error.value = Event( "친구 업데이트 실패")
             Log.d(TAG, "친구 업데이트 실패")
         })
     }
@@ -143,6 +148,7 @@ class MyRepository(
             detailViewTagListResult.value = it.distinct()
             Log.d(TAG, "상세 뷰 태그 찾기 성공 $it")
         }, {
+            _error.value = Event( "상세 뷰 태그 검색 실패")
             Log.d(TAG, "상세 뷰 태그 실패 성공 $it")
         })
     }
@@ -155,6 +161,7 @@ class MyRepository(
                     tagListWithQueryResult.value = it.distinctBy { it.tagName }
                     Log.d(TAG, "태그 찾기 성공 $it")
                 }, {
+                    _error.value = Event( "태그 이름순 검색 실패")
                     Log.d(TAG, "태그 찾기 실패 $it")
                 })
             }
@@ -163,6 +170,7 @@ class MyRepository(
                     tagListWithQueryResult.value =  it.distinctBy { it.tagName }
                     Log.d(TAG, "태그 찾기 성공 $it")
                 }, {
+                    _error.value = Event( "태그 등록순 검색 실패")
                     Log.d(TAG, "태그 찾기 실패 $it")
                 })
             }
@@ -173,7 +181,8 @@ class MyRepository(
         localDataSource.insertTag(tagList).subscribe({
             Log.d(TAG, "태그 추가 성공 $it")
         }, {
-            Log.d(TAG, "태그 추가 실패 ${it}")
+            _error.value = Event( "태그 삽입 실패")
+            Log.d(TAG, "태그 추가 실패 $it")
         })
     }
 
@@ -181,7 +190,8 @@ class MyRepository(
         localDataSource.deleteTagInTagTab(tag).subscribe({
             Log.d(TAG, "태그 삭제 성공 $it")
         }, {
-            Log.d(TAG, "태그 삭제 실패 ${it}")
+            _error.value = Event( "태그탭에서 태그 삭제 실패")
+            Log.d(TAG, "태그 삭제 실패 $it")
         })
     }
 
@@ -190,7 +200,8 @@ class MyRepository(
             Log.d(TAG, "태그 삭제 성공 $it")
             if (tagList != null) insertTag(tagList)
         }, {
-            Log.d(TAG, "태그 삭제 실패 ${it}")
+            _error.value = Event( "태그 삭제 실패")
+            Log.d(TAG, "태그 삭제 실패 $it")
         })
     }
 
@@ -199,7 +210,8 @@ class MyRepository(
             friendListWithTagName.value = it
             Log.d(TAG, "태그이름으로 친구 불러오기 성공")
         },{
-            Log.d(TAG, "태그이름으로 친구 불러오기 실패 ${it}")
+            _error.value = Event( "태그이름으로 친구 불러오기 실패")
+            Log.d(TAG, "태그이름으로 친구 불러오기 실패 $it")
         })
     }
 
@@ -216,7 +228,8 @@ class MyRepository(
                 favoriteNationResult.value = it[0]
             }
         }, {
-            Log.d(TAG, "국가 즐겨찾기 불러오기 실패 ${it}")
+            _error.value = Event( "국가 즐겨찾기 불러오기 실패")
+            Log.d(TAG, "국가 즐겨찾기 불러오기 실패 $it")
         })
     }
 
@@ -225,12 +238,14 @@ class MyRepository(
             localDataSource.setFavorite(nation).subscribe({
                 Log.d(TAG, "국가 즐겨찾기 삽입 성공 $it")
             }, {
+                _error.value = Event( "국가 즐겨찾기 삽입 실패")
                 Log.d(TAG, "국가 즐겨찾기 삽입 실패 $it")
             })
         }else{
             localDataSource.deFavorite(nation).subscribe({
                 Log.d(TAG, "국가 즐겨찾기 삭제 성공 $it")
             }, {
+                _error.value = Event( "국가 즐겨찾기 삽입 실패")
                 Log.d(TAG, "국가 즐겨찾기 삭제 실패 $it")
             })
         }

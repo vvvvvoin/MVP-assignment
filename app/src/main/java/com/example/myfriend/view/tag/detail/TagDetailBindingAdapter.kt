@@ -3,8 +3,6 @@ package com.example.myfriend.view.tag.detail
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfriend.data.db.entity.Friend
-import com.example.myfriend.data.db.entity.Tag
-import com.example.myfriend.view.home.addEdit.AddEditTagAdapter
 import java.util.ArrayList
 
 @BindingAdapter("setTagItemList")

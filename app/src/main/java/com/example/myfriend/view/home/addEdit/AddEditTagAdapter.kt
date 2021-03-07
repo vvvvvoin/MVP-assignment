@@ -1,14 +1,11 @@
 package com.example.myfriend.view.home.addEdit
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfriend.data.db.entity.Friend
 import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.databinding.ItemTagAddEditBinding
-import com.example.myfriend.view.home.HomeAdapter
 
 class AddEditTagAdapter(private val isAddEdit : Boolean) : RecyclerView.Adapter<AddEditTagAdapter.ItemHolder>() {
 

@@ -1,6 +1,5 @@
 package com.example.myfriend.view.setting
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
@@ -58,6 +57,7 @@ class SettingFragment : Fragment() {
         return view
     }
 
+    //낮은 버전의 sdk 전용
     fun getSystemLocaleLegacy(config: Configuration): Locale? {
         return config.locale
     }
@@ -67,6 +67,7 @@ class SettingFragment : Fragment() {
         return config.getLocales().get(0)
     }
 
+    //낮은 버전의 sdk 전용
     fun setSystemLocaleLegacy(config: Configuration, locale: Locale) {
         config.locale = locale
     }
@@ -94,8 +95,8 @@ object LocaleWrapper {
         if (sLocale == null) {
             return base
         }
-        val res: Resources = base.getResources()
-        val config = res.getConfiguration()
+        val res: Resources = base.resources
+        val config = res.configuration
         config.setLocale(sLocale)
         return base.createConfigurationContext(config)
     }

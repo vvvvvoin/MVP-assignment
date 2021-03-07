@@ -41,7 +41,6 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
             android:hint="@string/number"
-            android:inputType="numberSigned"
             android:maxLines="1"
             android:text="@{data.number}"
             android:textSize="20sp" />

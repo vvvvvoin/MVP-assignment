@@ -1,10 +1,8 @@
 package com.example.myfriend.view.tag.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.example.myfriend.data.db.entity.Friend
-import com.example.myfriend.data.db.entity.Tag
 import com.example.myfriend.data.repository.MyRepository
 
 class TagDetailPresenter(private val myRepository: MyRepository, private val tagName : String) : TagDetailContract.Presenter {

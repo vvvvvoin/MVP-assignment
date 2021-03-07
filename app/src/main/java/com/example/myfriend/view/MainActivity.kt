@@ -2,6 +2,7 @@ package com.example.myfriend.view
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -9,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.myfriend.R
 import com.example.myfriend.data.repository.MyRepository
+import com.example.myfriend.util.EventObserver
 import com.example.myfriend.view.setting.LocaleWrapper.wrap
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.android.ext.android.inject
@@ -34,12 +36,7 @@ class MainActivity : AppCompatActivity()  {
             setUpBottomNavigationBar()
         }
 
-/*
-        val navController = findNavController(R.id.nav_host_container)
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        findViewById<Toolbar>(R.id.toolbar)
-            .setupWithNavController(navController, appBarConfiguration)
-*/
+        initErrorObserver()
     }
 
     override fun onDestroy() {
@@ -70,5 +67,10 @@ class MainActivity : AppCompatActivity()  {
         return currentNavController?.value?.navigateUp() ?: false
     }
 
+    private fun initErrorObserver() {
+        myRepository.error.observe(this, EventObserver{
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+    }
 
 }
