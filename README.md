@@ -2,8 +2,8 @@
 
 ## 애플리케이션 설명
 
-- 카카오 검색 API를 이용한 책 검색 애플리케이션
-- Clean Architecture를 구현한 샘플 애플리케이션
+- MVP패턴을 이용한 전화번호 애플리케이션
+- 친구, 국가, 태그, 설정탭을 나누어 각 기능들을 수행
 - 기업과제를 수행하면서 진행한 프로젝트입니다.
 
 ## 기술
@@ -11,9 +11,8 @@
 - MVP
 - Koin
 - Retrofit2
-- RxJava
-- Room
-- DataBinding
+- RxKotlin
+- Android AC - DataBinding, LiveData, Room, NavigationComponent
 
 ## 스크린샷
 
