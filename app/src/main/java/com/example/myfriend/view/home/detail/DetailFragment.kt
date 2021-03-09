@@ -60,9 +60,7 @@ class DetailFragment : Fragment(), DetailContract.View {
         mPresenter = presenter
     }
 
-    override fun errorMessage(error: String) {
 
-    }
 
     override fun openNumberApp(number: String) {
 

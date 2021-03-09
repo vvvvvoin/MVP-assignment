@@ -20,7 +20,6 @@ class NationDetailFragment : Fragment(), NationDetailContract.View{
     private lateinit var mPresenter: NationDetailContract.Presenter
 
     private val myRepository: MyRepository by inject()
-    private val nationDetailFragmentArgs :NationDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,20 +28,8 @@ class NationDetailFragment : Fragment(), NationDetailContract.View{
         mPresenter = NationDetailPresenter(myRepository)
         mPresenter.setView(this)
         val view = inflater.inflate(R.layout.fragment_nation_detail, container, false)
-        val nation =  nationDetailFragmentArgs.nation
-        val isCheck =  nationDetailFragmentArgs.isChecked
-        val uri = ("https://flagcdn.com/h240/" + nation.alpha2Code.toLowerCase(Locale.ROOT) +".png").toUri()
-        val imageView = view.findViewById<ImageView>(R.id.nation_image)
 
-        if(isCheck){
-            Log.d(TAG, "별표")
-        }else{
-            Log.d(TAG, "별표x")
-        }
 
-        view.findViewById<TextView>(R.id.nation_name_text).text =nation.nation
-
-        Glide.with(this).load(uri).override(Target.SIZE_ORIGINAL).into(imageView)
 
         setHasOptionsMenu(true)
         return view
@@ -61,7 +48,4 @@ class NationDetailFragment : Fragment(), NationDetailContract.View{
         mPresenter = presenter
     }
 
-    override fun errorMessage(error: String) {
-
-    }
 }
