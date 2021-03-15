@@ -31,6 +31,7 @@
             android:layout_marginVertical="5dp"
             android:hint="@string/name"
             android:maxLines="1"
+            android:singleLine="true"
             android:text="@{data.name}"
             android:textSize="20sp" />
 
@@ -41,6 +42,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
             android:hint="@string/number"
+            android:singleLine="true"
             android:maxLines="1"
             android:text="@{data.number}"
             android:textSize="20sp" />
@@ -53,6 +55,7 @@
             android:layout_marginVertical="5dp"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
+            android:singleLine="true"
             android:maxLines="1"
             android:text="@{data.email}"
             android:textSize="20sp" />

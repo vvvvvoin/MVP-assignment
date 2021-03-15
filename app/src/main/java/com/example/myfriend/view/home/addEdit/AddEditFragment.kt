@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.view.WindowManager.LayoutParams
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -87,6 +88,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false)
         binding.data = friendData
+
         binding.tagItemRecycler.apply {
             adapter = addEditTagAdapter
             setHasFixedSize(true)
@@ -125,7 +127,7 @@ class AddEditFragment : Fragment(), AddEditContract.View {
     }
 
     private fun initErrorObserver() {
-        myRepository.error.observe(viewLifecycleOwner, EventObserver{
+        myRepository.error.observe(viewLifecycleOwner, EventObserver {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         })
     }
@@ -143,11 +145,13 @@ class AddEditFragment : Fragment(), AddEditContract.View {
             }
         }
     }
+
     private fun showDialog(){
         val dialogView = layoutInflater.inflate(R.layout.custom_tag_dialog, null)
         val editText = dialogView.findViewById<EditText>(R.id.custom_tag_dialog_edit)
+
         val builder = AlertDialog.Builder(requireContext())
-        builder.setView(dialogView)
+        val dialog = builder.setView(dialogView)
             .setTitle(getString(R.string.add_edit_tag_dialog_title))
             .setMessage(getString(R.string.add_edit_tag_dialog_message))
             .setPositiveButton(getString(R.string.add_edit_tag_dialog_positive_btn)) { dialogInterface, i ->
@@ -160,7 +164,14 @@ class AddEditFragment : Fragment(), AddEditContract.View {
             }
             .setNegativeButton(R.string.add_edit_tag_dialog_negative_btn) { dialogInterface, i ->
             }
-            .show()
+            .create()
+
+        dialog.window?.apply {
+            clearFlags(LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        }
+        dialog.show()
+
     }
     private fun setProfileImage(uri: Uri?, view: ImageView){
         Glide.with(this).load(uri).into(view)
@@ -197,13 +208,21 @@ class AddEditFragment : Fragment(), AddEditContract.View {
                         return true
                     }
                     //권한부여
-                    if(profileUri != null && profileUri.toString() != "null" && receivedProfileUriOrigin != receivedProfileUri){
+                    if (profileUri != null && profileUri.toString() != "null" && receivedProfileUriOrigin != receivedProfileUri) {
                         activity?.contentResolver?.takePersistableUriPermission(
                             profileUri,
                             TASK_FLAG
                         )
                     }
-                    mPresenter.addEdit(name, number, email, flagUri, nation, profileUri.toString(), addEditTagAdapter.tagList)
+                    mPresenter.addEdit(
+                        name,
+                        number,
+                        email,
+                        flagUri,
+                        nation,
+                        profileUri.toString(),
+                        addEditTagAdapter.tagList
+                    )
                 } else {
                     showMessage(getString(R.string.add_edit_tag_necessary_nation))
                     return true

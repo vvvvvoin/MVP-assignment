@@ -12,6 +12,7 @@ abstract class BaseRepository  {
     val error: LiveData<Event<String>>
         get() = _error
 
+
     protected val compositeDisposable = CompositeDisposable()
 
     operator fun invoke(disposable: Disposable) {

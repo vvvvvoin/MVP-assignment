@@ -1,6 +1,8 @@
 package com.example.myfriend.view.home.addEdit
 
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction

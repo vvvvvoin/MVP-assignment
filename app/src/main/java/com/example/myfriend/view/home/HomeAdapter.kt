@@ -36,8 +36,7 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
         var layout = binding.layout
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Friend) {
-            binding.data = item
+        fun bind(item: Friend) {          binding.data = item
             if (item.number.equals("")) {
                 binding.friendCallText.text = item.email
             } else if (item.email.equals("")) {
@@ -45,6 +44,7 @@ class HomeAdapter(private val mPresenter : HomePresenter) : RecyclerView.Adapter
             }else{
                 binding.friendCallText.text = item.number + ", " +  item.email
             }
+
         }
     }
 

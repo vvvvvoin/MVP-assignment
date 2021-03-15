@@ -45,7 +45,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         val view = binding.root
         binding.friendRecycler.apply {
             adapter = homeAdapter
-            setPresenter(mPresenter)
+            //setPresenter(mPresenter)
             setHasFixedSize(true)
         }
 
