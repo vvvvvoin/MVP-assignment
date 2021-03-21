@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
@@ -171,8 +172,8 @@ class AddEditFragment : Fragment(), AddEditContract.View {
             setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         }
         dialog.show()
-
     }
+
     private fun setProfileImage(uri: Uri?, view: ImageView){
         Glide.with(this).load(uri).into(view)
     }
